@@ -1,0 +1,1162 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>검수김군</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap">
+<style>
+/* Layout: 출장김군 패턴. 흰 상단(로고·탭·배지·연결·Teams) → 안내 띠 → 좌측 번호 카드 / 우측 진행·점검·서식 미리보기 → 작성 기준 패널 → 하단 작업 바 */
+:root {
+  --bg: #f1f4f1; --surface: #ffffff; --fg: #16221b; --muted: #5a6b60; --line: #d3dcd5;
+  --accent: #0a6b39; --accent-dk: #0b4a2a; --accent-fg: #ffffff; --accent-soft: #e2f1e8; --beta: #d9435f; --pill: #5b615d;
+  --logo: #00713f; --ok: #1b7a45; --warn: #9a5a00; --warn-soft: #fbefd9; --err: #b3261e; --err-soft: #fbe5e3; --info: #3a5a7a; --info-soft: #e5edf5;
+  --note-bg: #fff4d4; --note-bd: #ecd58a; --note-fg: #4d3b00; --amber: #b9770a;
+  --paper: #ffffff; --ink: #111111; --red: #d00000;
+  --sans: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --serif: "Noto Serif KR", "Batang", "Apple Myungjo", serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1511; --surface: #16201a; --fg: #e5eee8; --muted: #92a69a; --line: #2a3a30;
+    --logo: #4cc38a; --accent: #4cc38a; --accent-dk: #2f9565; --accent-fg: #07140d; --accent-soft: #1b3226; --pill: #3a423d;
+    --ok: #5fd39a; --warn: #e3a550; --warn-soft: #33281a; --err: #f28b83; --err-soft: #3a1f1d; --info: #8fb4d8; --info-soft: #1d2a38;
+    --note-bg: #3a301a; --note-bd: #6b5a2a; --note-fg: #f0dca0; --amber: #e3a550;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1511; --surface: #16201a; --fg: #e5eee8; --muted: #92a69a; --line: #2a3a30;
+  --logo: #4cc38a; --accent: #4cc38a; --accent-dk: #2f9565; --accent-fg: #07140d; --accent-soft: #1b3226; --pill: #3a423d;
+  --ok: #5fd39a; --warn: #e3a550; --warn-soft: #33281a; --err: #f28b83; --err-soft: #3a1f1d; --info: #8fb4d8; --info-soft: #1d2a38;
+  --note-bg: #3a301a; --note-bd: #6b5a2a; --note-fg: #f0dca0; --amber: #e3a550;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.55 var(--sans); padding-block: 0; word-break: keep-all; overflow-wrap: anywhere; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+kbd { font: 11px/1 var(--mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 2px 5px; background: var(--surface); }
+
+/* 상단 */
+.top { position: relative; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top-in { display: flex; align-items: center; gap: 8px 12px; flex-wrap: nowrap; padding-block: 10px; }
+.top-in > * { flex: none; }
+.top-in .tabs { flex: 0 1 auto; min-width: 0; }
+.top-in .stds { flex: 1 1 0; min-width: 0; overflow: hidden; white-space: nowrap; flex-wrap: nowrap; }
+.brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
+.ku { display: block; width: 54px; height: 28px; background: var(--logo); -webkit-mask: url("data:image/png;base64,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") center/contain no-repeat; mask: url("data:image/png;base64,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") center/contain no-repeat; flex: none; }
+.bt { border-left: 1px solid var(--line); padding-left: 10px; }
+.brand h1 { margin: 0; font: 700 16px/1.1 var(--sans); display: flex; align-items: center; gap: 6px; }
+.beta { font: 700 9.5px/1 var(--sans); letter-spacing: .06em; background: var(--beta); color: #fff; padding: 3px 6px; border-radius: 3px; }
+.brand small { display: block; font-size: 9.5px; letter-spacing: .1em; color: var(--muted); margin-top: 3px; line-height: 1.25; }
+.tabs { display: flex; gap: 2px; overflow-x: auto; max-width: 100%; scrollbar-width: thin; }
+.tabs a { padding: 8px 10px; color: var(--fg); font-weight: 500; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+.tabs a:hover { color: var(--accent); }
+.tabs a[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+.stds { display: flex; align-items: center; gap: 4px 8px; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+.stds b { font: 700 11px/1 var(--mono); white-space: nowrap; color: #fff; padding: 4px 8px; border-radius: 3px; letter-spacing: .01em; }
+.stds .c1 { background: #0f5a38; } .stds .c2 { background: #0e6b73; } .stds .c3 { background: #6f7a1c; }
+.top-right { margin-left: auto; display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; white-space: nowrap; }
+@media (max-width: 1240px) { .stds span { display: none; } }
+@media (max-width: 1100px) { .stds { display: none; } .top-in .tabs { flex: 1 1 0; } }
+@media (max-width: 860px) { .top-in { flex-wrap: wrap; } .top-right { margin-left: 0; width: 100%; overflow-x: auto; } .top-in .tabs { flex: 1 1 100%; order: 3; } }
+.tbtn { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 5px 11px; font-size: 12.5px; display: inline-flex; align-items: center; gap: 5px; }
+.tbtn:hover, .tbtn[aria-expanded="true"] { border-color: var(--accent); }
+.tbtn .mono { font: 11px var(--mono); color: var(--muted); }
+.aipill { border: 1px solid var(--amber); color: var(--amber); background: var(--surface); border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 700; }
+.aipill.is-on { border-color: var(--ok); color: var(--ok); }
+.aipill[aria-expanded="true"] { background: var(--warn-soft); }
+.tmbtn { background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 5px 11px; font-size: 12.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+.tmbtn i { font: 700 11px/1 var(--sans); font-style: normal; background: #5b5fc7; color: #fff; border-radius: 3px; padding: 3px 5px; }
+.tmbtn:hover, .tmbtn[aria-expanded="true"] { border-color: var(--accent); }
+.maker { text-align: right; line-height: 1.25; }
+.maker b { display: block; font-size: 13px; }
+.maker small { font: 10.5px/1.2 var(--mono); color: var(--muted); }
+
+/* 팝오버 */
+.pop { position: absolute; top: 100%; right: max(16px, env(safe-area-inset-right, 0px)); width: min(400px, calc(100vw - 32px)); background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.25); padding: 14px; display: flex; flex-direction: column; gap: 10px; max-height: calc(100vh - 120px); overflow-y: auto; }
+.pop[hidden], [hidden] { display: none !important; }
+.pop h2 { margin: 0; font: 700 14px/1.3 var(--sans); }
+.pop .opt { text-align: left; border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 9px 12px; display: grid; gap: 2px; }
+.pop .opt:hover:not(:disabled) { border-color: var(--accent); }
+.pop .opt:disabled { opacity: .5; cursor: default; }
+.pop .opt b { font-size: 13px; }
+.pop .opt span { font-size: 12px; color: var(--muted); }
+.arc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.arc li { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; }
+.arc li span { flex: 1; min-width: 0; font-size: 13px; }
+.arc li small { display: block; color: var(--muted); font-size: 11px; }
+
+/* 명세서 불러오기 */
+.imp { width: min(460px, calc(100vw - 32px)); }
+.imp .seg { display: flex; gap: 6px; }
+.imp .seg label { flex: 1; text-align: center; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-size: 13px; cursor: pointer; }
+.imp .seg label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.imp .seg input { position: absolute; opacity: 0; pointer-events: none; }
+.imp textarea { min-height: 96px; }
+.impres { border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: grid; gap: 4px; font-size: 12.5px; background: var(--bg); }
+.impres b { font-size: 13px; }
+.impres ul { margin: 2px 0 0; padding-left: 16px; }
+/* 안내 띠 */
+.notice-top { display: flex; gap: 10px 14px; align-items: center; flex-wrap: wrap; background: var(--note-bg); border: 1px solid var(--note-bd); color: var(--note-fg); border-radius: 8px; padding: 10px 14px; margin-top: 14px; }
+.nt { flex: 1; min-width: 220px; font-size: 12.5px; line-height: 1.5; }
+.notice-top .row { margin-left: auto; }
+
+/* 본문 */
+.main { padding-block: 14px 8px; }
+.grid { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 18px; align-items: start; margin-top: 14px; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.col { display: flex; flex-direction: column; gap: 14px; min-width: 0; scroll-margin-top: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; scroll-margin-top: 12px; }
+details.card > summary, .phead { display: flex; align-items: center; gap: 8px; padding: 11px 14px; list-style: none; cursor: pointer; }
+.phead { cursor: default; flex-wrap: wrap; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary h2, .phead h2 { margin: 0; font: 700 14px/1.3 var(--sans); display: flex; align-items: center; gap: 8px; }
+details.card > summary small, .phead .hint { margin-left: auto; color: var(--muted); font-size: 11.5px; text-align: right; }
+.no { font: 700 11px/1 var(--mono); color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 4px; padding: 3px 6px; }
+.card .body { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 10px; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.fields .wide { grid-column: 1 / -1; }
+.sub { font-size: 12px; font-weight: 700; color: var(--muted); margin: 4px 0 -2px; }
+label.f { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); min-width: 0; }
+label.f input, label.f select, label.f textarea { background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 7px 9px; color: var(--fg); min-width: 0; width: 100%; }
+label.f textarea { min-height: 64px; resize: vertical; }
+label.f input::placeholder, label.f textarea::placeholder { color: var(--muted); opacity: .6; }
+label.chk { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.4; }
+label.chk input { margin-top: 3px; accent-color: var(--accent); flex: none; }
+.group { border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.group > b { font-size: 12.5px; }
+.checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px 10px; }
+.hint { font-size: 12px; color: var(--muted); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 6px 12px; font-size: 13px; text-decoration: none; display: inline-block; color: var(--fg); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent-dk); color: #fff; border-color: var(--accent-dk); font-weight: 700; }
+.btn.sm { padding: 3px 9px; font-size: 12px; }
+.btn.big { width: 100%; padding: 12px; font-size: 15px; text-align: center; }
+.btn:disabled { opacity: .45; cursor: default; }
+.sample { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 8px 12px; font-size: 12.5px; }
+.sample span { margin-right: auto; }
+.money { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; font-variant-numeric: tabular-nums; }
+.kor { color: var(--red); font-weight: 700; }
+:root[data-theme="dark"] .kor { color: #ff8c8c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .kor { color: #ff8c8c; } }
+.item { border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.item header { display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+.item .line { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12.5px; }
+.item .line b { color: var(--fg); }
+
+/* 사진 올리기 */
+.drop { border: 1.5px dashed var(--accent); background: var(--accent-soft); border-radius: 8px; padding: 16px 12px; text-align: center; display: grid; gap: 4px; cursor: pointer; }
+.drop b { color: var(--accent); font-size: 13px; }
+.drop span { font-size: 12px; color: var(--muted); }
+.drop.on { background: var(--surface); }
+.thumbs { display: flex; gap: 10px; flex-wrap: wrap; }
+.th { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; font-size: 12px; }
+.th img { width: 52px; height: 40px; object-fit: cover; border-radius: 3px; }
+
+/* 점검 범위 */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-ck { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; font-size: 12.5px; background: var(--surface); }
+.chip-ck:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.chip-ck input { accent-color: var(--accent); }
+details.sm { border-top: 1px dashed var(--line); padding-top: 8px; }
+details.sm > summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
+details.sm .in { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+
+/* 진행 */
+.prog { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.prog-top { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 16px; align-items: center; }
+.ring { --p: 0; width: 78px; height: 78px; border-radius: 50%; background: conic-gradient(var(--accent) calc(var(--p) * 1%), var(--line) 0); display: grid; place-items: center; position: relative; }
+.ring::before { content: ""; position: absolute; inset: 7px; border-radius: 50%; background: var(--surface); }
+.ring b { position: relative; font: 700 20px/1 var(--sans); font-variant-numeric: tabular-nums; }
+.ring small { position: absolute; bottom: 17px; font-size: 9.5px; color: var(--muted); }
+.bars { display: flex; flex-direction: column; gap: 5px; }
+.brow { display: grid; grid-template-columns: 70px minmax(0, 1fr) 34px; gap: 8px; align-items: center; font-size: 12px; color: var(--muted); }
+.brow i { height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; display: block; }
+.brow i s { display: block; height: 100%; background: var(--accent); }
+.brow em { font: normal 11.5px var(--mono); text-align: right; }
+.dots { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 14px; font-size: 12.5px; }
+@media (max-width: 560px) { .dots { grid-template-columns: minmax(0, 1fr); } }
+.dots li { display: flex; align-items: center; gap: 7px; }
+.dots li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+.dots li.no-ok::before { background: var(--amber); }
+
+/* 점검 카드 */
+.issues { list-style: none; margin: 0; padding: 0 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+.issue { border: 1px solid var(--line); border-left-width: 4px; border-radius: 6px; padding: 8px 12px; display: grid; gap: 4px; }
+.issue.err { border-left-color: var(--err); } .issue.warn { border-left-color: var(--warn); } .issue.ok { border-left-color: var(--ok); } .issue.info { border-left-color: var(--info); }
+.ih { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.issue .tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 3px; }
+.issue.err .tag { background: var(--err-soft); color: var(--err); } .issue.warn .tag { background: var(--warn-soft); color: var(--warn); }
+.issue.ok .tag { background: var(--accent-soft); color: var(--ok); } .issue.info .tag { background: var(--info-soft); color: var(--info); }
+.issue .art { color: var(--muted); font-size: 11.5px; }
+.issue .msg { font-size: 13px; line-height: 1.5; }
+.issue .acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.aihead { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 14px 10px; }
+.aihead .hint { margin-right: auto; }
+
+/* 서식 미리보기: A4 210×297mm */
+.scroll { overflow-x: auto; padding: 0 14px 14px; }
+.sheet { margin: 0 auto 14px; }
+.paper { position: relative; width: 794px; min-height: 1123px; padding: 57px; background: var(--paper); color: var(--ink); font: 12px/1.4 var(--serif); transform-origin: top left; box-shadow: 0 1px 0 var(--line), 0 6px 18px rgba(0,0,0,.12); word-break: keep-all; overflow-wrap: anywhere; }
+.paper.over { outline: 2px dashed var(--err); }
+.pg2 { display: flex; flex-direction: column; height: 1009px; }
+.pg2 .photobox { flex: 1; height: auto; min-height: 0; }
+.stamp { position: absolute; top: 22px; right: 57px; font: 700 15px/1 var(--sans); letter-spacing: .3em; padding-left: .3em; color: var(--red); border: 2px solid var(--red); border-radius: 4px; padding: 5px 5px 5px 10px; opacity: .8; transform: rotate(-6deg); pointer-events: none; }
+.paper .code { font-size: 11px; margin-bottom: 6px; }
+.paper h3 { margin: 6px 0 12px; text-align: center; font: 700 20px/1.2 var(--serif); }
+.paper h3 span { border-bottom: 2px solid var(--ink); padding-bottom: 1px; }
+.doc { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.doc td, .doc th { border: 1px solid var(--ink); padding: 3px 5px; font-weight: 400; vertical-align: middle; word-break: keep-all; overflow-wrap: anywhere; }
+.doc th { font-weight: 700; background: #f2f2f2; text-align: center; }
+.doc .lab { text-align: center; font-size: 10px; background: #f2f2f2; font-weight: 700; }
+.doc .vert { text-align: center; font-size: 10px; font-weight: 700; line-height: 1.3; width: 20px; background: #f2f2f2; }
+.doc .ctr { text-align: center; font-weight: 700; padding: 6px; }
+.doc .num { text-align: right; font-variant-numeric: tabular-nums; }
+.doc .ph, .paper .ph { color: #9a9a9a; }
+.doc .red { color: var(--red); font-weight: 700; }
+.doc .stack { padding: 0; }
+.doc .stack div { padding: 3px 5px; min-height: 22px; border-bottom: 1px solid var(--ink); }
+.doc .stack div:last-child { border-bottom: 0; }
+.doc .grey { background: #e9e9e9; }
+.doc .rej td:first-child { width: 22%; text-align: center; background: #f2f2f2; letter-spacing: .3em; font-weight: 700; }
+.doc .rej td { padding: 10px 8px; }
+.paper .sign { text-align: right; margin: 10px 0 0; font-size: 12px; }
+.paper .date { text-align: center; margin: 16px 0 12px; font-size: 12px; letter-spacing: .06em; }
+.photobox { border: 1px solid var(--ink); height: 300px; display: flex; flex-direction: column; margin-bottom: -1px; }
+.photobox b { padding: 3px 6px; font-size: 11px; }
+.photobox div { flex: 1; display: grid; place-items: center; overflow: hidden; }
+.photobox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.chip { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; background: var(--surface); font-size: 12px; color: var(--muted); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+
+/* 작성 기준 */
+.guide { margin-top: 18px; }
+.gcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px 22px; padding: 0 14px 16px; }
+.gcols h3 { margin: 0 0 4px; font-size: 13px; color: var(--accent); }
+.gcols p, .gcols li { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--fg); }
+.gcols ul { margin: 4px 0 0; padding-left: 16px; }
+footer { margin: 18px 0 14px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; display: grid; gap: 4px; }
+footer b { color: var(--fg); }
+
+/* 하단 작업 바 */
+.actbar { position: sticky; bottom: 0; z-index: 25; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.actbar .in { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-block: 9px; }
+.keys { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(70px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 8px 16px; border-radius: 6px; font-size: 13px; z-index: 60; max-width: calc(100vw - 32px); }
+</style>
+
+<header class="top" id="bar">
+  <div class="wrap top-in">
+    <a class="brand" href="#write">
+      <span class="ku" role="img" aria-label="KU"></span>
+      <span class="bt"><h1>검수김군 <span class="beta">BETA</span></h1><small>KU INSPECTION<br>ASSISTANT</small></span>
+    </a>
+    <nav class="tabs" aria-label="화면">
+      <a href="#write" data-tab="write" aria-selected="true">작성</a>
+      <a href="#preview" data-tab="preview" aria-selected="false">미리보기</a>
+      <a href="#guide" data-tab="guide" aria-selected="false">작성 기준</a>
+    </nav>
+    <div class="stds"><b class="c1">서식22 검수조서</b><b class="c2">별지2호 검수거부사유서</b><b class="c3">요강 2025.10.1.</b></div>
+    <div class="top-right">
+      <button class="tbtn" id="newBtn">+ 새 작업</button>
+      <button class="tbtn" id="impBtn" aria-haspopup="true" aria-expanded="false" aria-controls="impPop">명세서 불러오기</button>
+      <button class="tbtn" id="arcBtn" aria-haspopup="true" aria-expanded="false" aria-controls="arcPop">보관함 <span class="mono" id="arcCount">0</span></button>
+      <button class="aipill" id="aiBtn" aria-haspopup="true" aria-expanded="false" aria-controls="aiPop"><span id="aiLabel">Claude 확인 중</span></button>
+      <button class="tmbtn" id="tmBtn" aria-haspopup="true" aria-expanded="false" aria-controls="tmPop"><i>T</i>Teams 채팅</button>
+      <div class="maker" title="만든이"><b>앵커김군</b><small>coolzet@konkuk.ac.kr</small></div>
+    </div>
+  </div>
+  <!-- AI 연결 메뉴 -->
+  <div class="pop" id="aiPop" hidden role="dialog" aria-label="AI 연결">
+    <h2>AI 연결</h2>
+    <div class="hint" id="aiStat">확인 중입니다.</div>
+    <button class="opt" id="optAcct"><b>본인 Claude 계정</b><span>claude.ai에서 연 화면에서 허용하면 연결됩니다. 본인 사용 한도에서 차감됩니다.</span></button>
+    <button class="opt" id="optChat"><b>Claude 채팅창 이용</b><span>요청문을 복사해 claude.ai 채팅에 붙여 넣고, 받은 답을 다시 붙여 넣습니다. 어디서나 쓸 수 있습니다.</span></button>
+    <button class="opt" id="optBasic"><b>AI 없이 기본 규칙</b><span>검수요강 점검, 검산, 형식 점검만 사용합니다.</span></button>
+    <div class="hint">AI에는 성명, 전화, 이메일, 주민등록번호 형태의 숫자를 보내지 않습니다.</div>
+    <a class="hint" href="https://claude.ai/artifact/KiKryPt2T4bbNMouqXB2NQ" target="_blank" rel="noopener">검수김군을 claude.ai에서 열기 ↗</a>
+  </div>
+
+  <!-- Teams 채팅 -->
+  <div class="pop" id="tmPop" hidden role="dialog" aria-label="Teams 채팅">
+    <h2>앵커김군에게 Teams 채팅</h2>
+    <label class="f">문의 유형
+      <select id="tmType"><option>사용 문의</option><option>오류 신고</option><option>베타 사용 의견</option><option>검수 기준 개선 제안</option><option>기타</option></select>
+    </label>
+    <label class="f">보낼 내용<textarea id="tmText" placeholder="궁금한 점이나 고칠 점을 적어 주세요."></textarea></label>
+    <label class="chk"><input type="checkbox" id="tmCtx" checked> 현재 화면 정보 함께 보내기 (탭, 문서 유형)</label>
+    <div class="hint">작성한 문서 내용은 자동으로 담기지 않습니다. 개인정보는 적지 마세요.</div>
+    <div class="row">
+      <a class="btn primary" id="tmLink" href="https://teams.microsoft.com/l/chat/0/0?users=coolzet%40konkuk.ac.kr" target="_blank" rel="noopener">Teams에서 채팅 열기</a>
+      <button class="btn" id="tmCopy">내용 복사</button>
+      <a class="btn" id="tmMail" href="mailto:coolzet@konkuk.ac.kr">메일로 보내기</a>
+    </div>
+    <div class="hint">받는 사람: coolzet@konkuk.ac.kr. Teams 앱 또는 웹이 열리면 받는 사람과 내용이 채워져 있습니다. 보내기는 Teams에서 직접 누르세요. 열리지 않으면 내용을 복사해 붙여 넣으세요.</div>
+  </div>
+  <div class="pop imp" id="impPop" hidden role="dialog" aria-label="명세서 불러오기">
+    <h2>거래명세서·세금계산서에서 불러오기</h2>
+    <div class="seg"><label><input type="radio" name="impKind" value="거래명세서" checked> 거래명세서</label><label><input type="radio" name="impKind" value="전자세금계산서"> 전자세금계산서</label></div>
+    <div class="hint py">공급자, 공급받는자, 발주금액, 품목(품명, 규격, 수량, 단가)을 읽어 검수조서에 채웁니다. 사용장소, 사용자, 인수자는 직접 적습니다.</div>
+    <div class="drop" id="impDrop" tabindex="0" role="button" aria-label="명세서 이미지 올리기"><b>이미지 파일 올리기 (JPG·PNG·WebP)</b><span id="impFileName">PDF는 열어서 글자를 복사해 아래에 붙여 넣으세요.</span></div>
+    <input type="file" id="impFile" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+    <label class="f">또는 글자 붙여넣기<textarea id="impText" placeholder="PDF나 메일에서 복사한 명세서 내용"></textarea></label>
+    <div class="row"><button class="btn primary" id="impRun">불러오기</button><button class="btn" id="impCopy">요청문 복사 (Claude 연결 없이)</button></div>
+    <label class="f" id="impAnsW" hidden>Claude 답(JSON) 붙여넣기<textarea id="impAns"></textarea></label>
+    <div class="impres" id="impRes" hidden></div>
+    <div class="hint py" id="impHint">Claude에 보내는 내용은 올린 이미지와 붙여넣은 글자뿐입니다. 주민등록번호 형식은 글자에서 지웁니다. 이미지는 직접 가릴 수 없으니 개인정보가 없는 파일을 쓰세요.</div>
+  </div>
+  <div class="pop" id="arcPop" hidden role="dialog" aria-label="보관함">
+    <h2>보관함</h2>
+    <ul class="arc" id="arcList"></ul>
+    <div class="row"><button class="btn sm" id="btnSample">예시 불러오기</button></div>
+    <div class="hint py">작업은 이 브라우저에만 최근 10개까지 보관됩니다. 사진은 보관하지 않습니다.</div>
+  </div>
+</header>
+
+<div class="wrap main">
+  <div class="notice-top" id="aiNotice" hidden>
+    <div class="nt py">Claude가 연결되지 않았습니다. 본인 계정(claude.ai), 채팅창 붙여넣기, 기본 규칙 중에서 고르세요.</div>
+    <div class="row"><button class="btn primary" id="noticeConn">Claude 연결하기</button><button class="btn" id="noticeOpen">연결 방법 보기</button><button class="btn" id="noticeClose" aria-label="닫기">✕</button></div>
+  </div>
+
+  <div class="grid">
+    <div class="col" id="write">
+      <div class="sample" id="sampleBar" hidden>
+        <span class="py">예시 데이터가 들어 있습니다. 실제 내용으로 바꿔 쓰세요.</span>
+        <button class="btn sm" id="btnClear2">모두 지우기</button>
+      </div>
+
+      <details class="card" open>
+        <summary><h2><span class="no">00</span> 검수 구분</h2><small id="chipDept"></small></summary>
+        <div class="body" id="fRule"></div>
+      </details>
+      <details class="card" open>
+        <summary><h2><span class="no">01</span> 공급받는자·공급자</h2><small id="sum1"></small></summary>
+        <div class="body"><div class="sub">공급받는자</div><div class="fields" id="fRecv"></div><div class="sub">공급자</div><div class="fields" id="fSup"></div></div>
+      </details>
+      <details class="card" open>
+        <summary><h2><span class="no">02</span> 발주금액과 품목</h2><small id="sum3"></small></summary>
+        <div class="body">
+          <label class="f">발주금액 (부가세 포함, 원)<input id="amount" inputmode="numeric" data-p="amount" placeholder="1000"></label>
+          <div class="money"><span>한글 <span class="kor" id="amtKor">-</span></span><span>품목 합계 <b id="sumTop">0</b>원</span></div>
+          <div id="items" class="col" style="gap:10px"></div>
+          <div class="row"><button class="btn" id="addItem">품목 추가</button></div>
+        </div>
+      </details>
+      <details class="card" open>
+        <summary><h2><span class="no">03</span> 검수 자료와 결과</h2></summary>
+        <div class="body" id="fRule2"></div>
+      </details>
+      <details class="card" open>
+        <summary><h2><span class="no">04</span> 확인란·사진</h2><small id="sum4"></small></summary>
+        <div class="body">
+          <div class="fields">
+            <label class="f wide">전자세금계산서 발급요청 이메일<input data-p="taxEmail" placeholder="아이디@konkuk.ac.kr"></label>
+            <label class="f wide">담당교수 및 부(센터)장 성명<input data-p="head" placeholder="성명"></label>
+          </div>
+          <div class="drop" id="drop" tabindex="0" role="button" aria-label="사진 올리기"><b>파일을 끌어다 놓거나 눌러서 고르기</b><span class="py">납품 물품 사진 두 장까지 올릴 수 있습니다. 화면 캡처는 Ctrl + V로 붙여 넣으세요.</span></div>
+          <input type="file" id="photoFile" accept="image/*" multiple hidden>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+      </details>
+      <details class="card" open>
+        <summary><h2><span class="no">05</span> 점검 범위</h2><small>AI 검수 포함</small></summary>
+        <div class="body">
+          <div class="chips">
+            <label class="chip-ck"><input type="checkbox" data-p="scope.요강"> 검수요강</label>
+            <label class="chip-ck"><input type="checkbox" data-p="scope.검산"> 검산</label>
+            <label class="chip-ck"><input type="checkbox" data-p="scope.요건"> 빈 칸·요건</label>
+            <label class="chip-ck"><input type="checkbox" data-p="scope.점검"> 형식</label>
+            <label class="chip-ck"><input type="checkbox" data-p="scope.개인정보"> 개인정보</label>
+          </div>
+          <div class="row"><button class="btn sm" id="scopeAll">모두 선택</button><button class="btn sm" id="scopeNone">모두 해제</button></div>
+          <button class="btn primary big" id="aiRun">AI로 검수하기</button>
+          <div class="hint py">성명, 전화, 이메일은 AI에 보내지 않습니다. Claude를 연결한 뒤 Ctrl + Enter로도 실행합니다.</div>
+          <details class="sm" id="chatDet">
+            <summary>다른 AI 창에서 검수하기 (Claude 연결이 안 될 때)</summary>
+            <div class="in">
+              <button class="btn" id="chatCopy">① 요청문 복사</button>
+              <a class="btn" href="https://claude.ai/new" target="_blank" rel="noopener">Claude 열기 (claude.ai) ↗</a>
+              <div class="hint py">Claude 새 대화에 요청문을 붙여 넣어 보내세요. 받은 답은 아래 칸에 다시 붙여 넣습니다.</div>
+              <label class="f"><textarea id="chatAns" placeholder="② Claude 답(JSON)을 여기에 붙여넣기"></textarea></label>
+              <button class="btn" id="chatApply">③ 결과 적용</button>
+            </div>
+          </details>
+        </div>
+      </details>
+    </div>
+
+    <div class="col">
+      <section class="card prog" id="progCard" aria-label="진행 상황"></section>
+      <section class="card" aria-label="제안 점검">
+        <div class="phead"><h2>제안 점검</h2><span class="hint" id="issueCount"></span></div>
+        <ul class="issues" id="issues"></ul>
+      </section>
+      <section class="card" aria-label="AI 의견" id="aiPanel" hidden>
+        <div class="phead"><h2>AI 의견</h2></div>
+        <div class="aihead">
+          <span class="hint py" id="aiMsg"></span>
+          <button class="btn sm" id="aiStop" hidden>중지</button>
+        </div>
+        <ul class="issues" id="aiList"></ul>
+      </section>
+      <section class="card" id="preview" aria-label="서식 미리보기">
+        <div class="phead"><h2>서식 미리보기</h2><span class="hint">빈칸은 왼쪽에서 채웁니다</span><span class="chip" id="a4Chip">A4 210×297mm</span></div>
+        <div class="scroll" id="sheets"><div class="sheet"><div class="paper" id="paper1"></div></div><div class="sheet"><div class="paper" id="paper2"></div></div><div class="sheet" id="sheet3" hidden><div class="paper" id="paper3"></div></div></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="card guide" id="guide">
+    <div class="phead"><h2><span class="no">기준</span> 작성 기준</h2><span class="hint">AI 요청문에 그대로 들어갑니다</span></div>
+    <div class="gcols">
+      <div><h3>사실만 씁니다</h3><p class="py">납품서류와 현품, 사진에 있는 내용만 적습니다. 자료에 없는 수치나 날짜는 만들지 않고 비워 둔 뒤 점검 카드의 지적으로 확인합니다.</p></div>
+      <div><h3>검수 주체 (제3조)</h3><p class="py">검수는 관재처 관재팀(글로컬은 기획처 기획예산팀)이 합니다. 아래 경우에는 발주부서가 검수할 수 있습니다.</p><ul><li>차량유지 물품, 화환·기념품 등</li><li>업무추진비 물품, 실험실습비 소모품</li><li>도서관 도서·전자정보원</li><li>구매계약업무요강 제3조제4항의 구매·용역·시설공사</li><li>특별회계 물품(글로컬 제외)</li><li>농·축·수·임산물, 수목, 화훼류</li></ul><p class="py" style="margin-top:6px">발주부서 검수는 발주부서장이 합니다. 예산부서 소속이 아닌 사람이 발주하면 발주자가 검수하고 예산부서장이 확인합니다.</p></div>
+      <div><h3>검수 자료 (제4조)</h3><ul><li>발주서, 지출결의서, 거래명세서</li><li>계약서, 시방서, 사양서, 도면</li><li>자료와 현품의 품질, 수량, 기타 조건을 대조</li><li>검수 후 서류에 서명</li></ul><p class="py" style="margin-top:6px">자료가 없으면 검수할 수 없습니다. 발주부서장이 요청하면 가검수를 하고, 자료가 갖춰지면 본검수를 합니다.</p></div>
+      <div><h3>검수하지 않는 경우 (제6조)</h3><ul><li>구매절차가 끝나지 않았을 때</li><li>계약서와 거래명세서에 따르지 않을 때</li><li>발주부서의 검수 요청이 없을 때</li></ul><h3 style="margin-top:10px">사전 사용 금지 (제5조)</h3><p class="py">검수를 받기 전에는 물품과 시설물을 사용할 수 없습니다.</p></div>
+      <div><h3>검수 유보</h3><p class="py">자료나 지출결의서, 청구서와 현품이 다르거나 변질, 감손, 공사불량 등 이상이 있으면 검수를 유보합니다. 검수거부사유서(별지서식 2호)를 붙여 즉시 발주부서에 알립니다.</p><h3 style="margin-top:10px">입회 (제7조)</h3><p class="py">운송업자가 배달한 물품에 이상이 있으면 운송업자와 관계자가 입회한 자리에서 확인서를 만들어 증거로 보관합니다.</p></div>
+      <div><h3>표기 (서식22)</h3><ul><li>일자 0000. 00. 00.</li><li>등록번호 000-00-00000</li><li>발주금액은 한글과 숫자를 함께</li><li>금액은 수량 × 단가, 합계는 금액의 합</li></ul></div>
+      <div><h3>점검 범위</h3><p class="py">검수요강, 검산, 빈 칸, 형식, 개인정보를 규칙으로 점검합니다. 요강에 없는 사항은 판단하지 않고, AI 의견은 제안으로만 씁니다.</p></div>
+      <div><h3>저장</h3><p class="py">저장하면 A4 인쇄용 HTML 파일이 만들어집니다. 파일을 열어 Ctrl + P로 PDF 저장이나 인쇄를 하세요. 사진도 함께 들어갑니다.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="py"><b>BETA</b> 시험 운영 중입니다. 자동 점검과 AI 의견은 제안입니다. 최종 확인 책임은 담당자와 결재권자에게 있습니다.</div>
+    <div>© 2026 건국대학교 앵커사업단 · 앵커김군. All rights reserved.</div>
+    <div>기준: 건국대학교 검수요강(개정 2025. 10. 1.) · 서식22 납품 확인 및 검수조서 · 앵커사업단 업무 지원용 비공식 도구 · 베타 버전</div>
+  </footer>
+</div>
+
+<div class="actbar"><div class="wrap in">
+  <span class="keys"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> AI 검수 · <kbd>Ctrl</kbd> + <kbd>V</kbd> 캡처 붙여넣기</span>
+  <div class="row"><button class="btn" id="btnCopy">검수내용 복사</button><button class="btn primary" id="btnSave">검수조서 저장 (.html)</button></div>
+</div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var toNum = function (v) { var n = Number(String(v == null ? "" : v).replace(/[^\d.-]/g, "")); return isFinite(n) ? n : 0; };
+  var fmt = function (n) { return Math.round(n).toLocaleString("ko-KR"); };
+
+  /* 한글 금액 */
+  function kor(n) {
+    if (!n) return "영";
+    var d = ["", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"], u = ["", "십", "백", "천"], big = ["", "만", "억", "조", "경"];
+    var s = "", g = 0;
+    while (n > 0) {
+      var part = n % 10000; n = Math.floor(n / 10000);
+      var t = "";
+      for (var i = 0; i < 4; i++) { var dig = part % 10; part = Math.floor(part / 10); if (dig) t = d[dig] + u[i] + t; }
+      if (t) s = t + big[g] + s;
+      g++;
+    }
+    return s;
+  }
+
+  var RECV = [["name", "상호", ""], ["biz", "등록번호", "000-00-00000"], ["rep", "성명", ""], ["tel", "전화", "02-000-0000"], ["addr", "주소", "", 1], ["date", "일자", "2026. 00. 00."], ["email", "이메일", "0000@konkuk.ac.kr"]];
+  var SUP = [["name", "상호", ""], ["biz", "등록번호", "000-00-00000"], ["rep", "성명", ""], ["tel", "전화", ""], ["addr", "주소", "", 1], ["type", "업태", ""], ["item", "종목", ""]];
+  var ITEM_FIELDS = [["name", "품명(용역명)", 1], ["model", "납품모델명(기자재, 연구장비 등)", 1], ["place", "사용장소(용역 실시 장소)", 1], ["qty", "수량"], ["price", "단가(원)"], ["dept", "사용자 소속"], ["user", "사용자"], ["recv", "인수자"]];
+  var DOCS = [["order", "발주서"], ["expend", "지출결의서"], ["statement", "거래명세서"], ["contract", "계약서"], ["spec", "시방서"], ["sheet", "사양서"], ["drawing", "도면"]];
+  var DOC_NAME = { order: "발주서", expend: "지출결의서", statement: "거래명세서", contract: "계약서", spec: "시방서", sheet: "사양서", drawing: "도면" };
+  var REASONS = [
+    ["1", "제1호 차량유지에 필요한 물품"], ["2", "제2호 외부에 직접 전달하는 화환, 기념품 등"], ["3", "제3호 업무추진비 과목에서 구입하는 물품"],
+    ["4", "제4호 실험실습비로 구입하는 소모품"], ["7", "제7호 도서관에서 구입하는 도서 및 전자정보원"],
+    ["9", "제9호 구매계약업무요강 제3조제4항에 의한 구매, 용역, 시설공사"], ["10", "제10호 특별회계에서 구입하는 물품(글로컬 제외)"],
+    ["11", "제11호 농·축·수·임산물, 수목, 화훼류"]
+  ];
+
+  function defRule() {
+    return { campus: "seoul", inspector: "central", reason: "", nonBudget: false, budgetHead: "", requested: false, closed: false, notUsed: false, tentative: false, result: "ok", notified: false, carrier: false,
+      docs: { order: false, expend: false, statement: false, contract: false, spec: false, sheet: false, drawing: false },
+      rej: { item: "0", spec: "", maker: "", reason: "", note: "", inspector: "", confirmer: "" } };
+  }
+  function newItem() { return { name: "", model: "", place: "", qty: "1", price: "", dept: "", user: "", recv: "" }; }
+  function blank() {
+    return {
+      recv: { name: "건국대학교 산학협력단", biz: "", rep: "", addr: "서울시 광진구 능동로 120", date: "", tel: "", email: "" },
+      sup: { name: "", biz: "", rep: "", addr: "", type: "", item: "", tel: "" },
+      amount: "", items: [newItem()], taxEmail: "", head: "", rule: defRule(), scope: { 요강: true, 검산: true, 요건: true, 점검: true, 개인정보: true }
+    };
+  }
+  function sample() {
+    var s = blank();
+    s.recv.date = "2026-10-27"; s.recv.tel = "02-000-0000"; s.recv.email = "example@konkuk.ac.kr";
+    s.sup = { name: "가나다전자", biz: "1234567890", rep: "김공급", addr: "서울시 성동구 예시로 1", type: "도소매", item: "전자제품", tel: "02-111-2222" };
+    s.amount = "1100000";
+    s.items = [
+      { name: "무선 키보드", model: "KB-100", place: "앵커사업단 사무실", qty: "3", price: "40000", dept: "앵커사업단", user: "홍길동", recv: "홍길동" },
+      { name: "모니터 27인치", model: "MN-27Q", place: "앵커사업단 사무실", qty: "2", price: "500000", dept: "앵커사업단", user: "홍길동", recv: "홍길동" }
+    ];
+    s.rule.requested = true; s.rule.closed = true; s.rule.notUsed = true;
+    s.rule.docs.order = true; s.rule.docs.expend = true; s.rule.docs.statement = true;
+    return s;
+  }
+  function merge(def, src) {
+    if (src == null || typeof src !== "object" || Array.isArray(def)) return src == null ? def : src;
+    var out = {}; Object.keys(def).forEach(function (k) { out[k] = merge(def[k], src[k]); });
+    Object.keys(src).forEach(function (k) { if (!(k in out)) out[k] = src[k]; });
+    return out;
+  }
+
+  var S = blank(), isSample = false, photos = [null, null], rejected = {}, aiNotes = [], aiState = "checking", SAMPLE = null, aiAvail = false, basicPref = false, ctl = null;
+  try {
+    var saved = localStorage.getItem("geomsu.v2");
+    if (saved) { var o = JSON.parse(saved); if (o && o.S) { S = merge(blank(), o.S); S.items = (o.S.items && o.S.items.length) ? o.S.items : [newItem()]; isSample = !!o.isSample; } else { S = sample(); isSample = true; } }
+    else { S = sample(); isSample = true; }
+    basicPref = localStorage.getItem("geomsu.basic") === "1";
+  } catch (e) { S = sample(); isSample = true; }
+
+  function save() { try { localStorage.setItem("geomsu.v2", JSON.stringify({ S: S, isSample: isSample })); } catch (e) {} }
+  function getp(p) { var a = p.split("."), o = S; for (var i = 0; i < a.length; i++) { if (o == null) return undefined; o = o[a[i]]; } return o; }
+  function setp(p, v) { var a = p.split("."), o = S; for (var i = 0; i < a.length - 1; i++) o = o[a[i]]; o[a[a.length - 1]] = v; }
+
+  function fieldHTML(group, f) {
+    return '<label class="f' + (f[3] ? " wide" : "") + '">' + f[1] + '<input data-p="' + group + "." + f[0] + '" placeholder="' + esc(f[2]) + '" autocomplete="off"></label>';
+  }
+  $("#fRecv").innerHTML = RECV.map(function (f) { return fieldHTML("recv", f); }).join("");
+  $("#fSup").innerHTML = SUP.map(function (f) { return fieldHTML("sup", f); }).join("");
+
+  function chk(path, text, wide) { return '<label class="chk' + (wide ? " wide" : "") + '"><input type="checkbox" data-p="' + path + '"> <span>' + text + "</span></label>"; }
+  $("#fRule").innerHTML =
+    '<div class="fields">' +
+    '<label class="f">캠퍼스<select data-p="rule.campus"><option value="seoul">서울</option><option value="glocal">GLOCAL(글로컬)</option></select></label>' +
+    '<label class="f">검수 주체 (제3조)<select data-p="rule.inspector"><option value="central">검수 담당 부서</option><option value="dept">발주부서 검수</option></select></label>' +
+    "</div>" +
+    '<div class="hint" id="deptHint"></div>' +
+    '<div class="fields" data-show="rule.inspector=dept">' +
+    '<label class="f wide">발주부서가 검수하는 사유 (제3조 제2항)<select data-p="rule.reason"><option value="">선택하세요</option>' + REASONS.map(function (r) { return '<option value="' + r[0] + '">' + r[1] + "</option>"; }).join("") + "</select></label>" +
+    chk("rule.nonBudget", "발주자가 예산부서 소속이 아님 (제3조 제3항 단서)", 1) +
+    '<label class="f wide" data-show="rule.nonBudget=true">예산부서장 성명 (검수 확인)<input data-p="rule.budgetHead" placeholder="성명"></label>' +
+    "</div>";
+  $("#fRule2").innerHTML =
+    '<div class="group"><b>검수 자료 (제4조 제1항)</b><div class="checks">' + DOCS.map(function (d) { return chk("rule.docs." + d[0], d[1]); }).join("") + "</div>" +
+    chk("rule.tentative", "자료가 없어 발주부서장 요청으로 가검수함 (제4조 제5항)", 1) + "</div>" +
+    '<div class="group"><b>진행 확인 (제5조, 제6조)</b>' +
+    chk("rule.requested", "발주부서의 검수 요청이 있음 (제6조 제1항 제3호)") +
+    chk("rule.closed", "구매절차가 끝남 (제6조 제1항 제1호)") +
+    chk("rule.notUsed", "검수 전에 사용하지 않음 (제5조)") + "</div>" +
+    '<label class="f">검수 결과<select data-p="rule.result"><option value="ok">이상 없음</option><option value="hold">검수 유보 (현품 상이, 변질, 감손, 공사불량 등)</option></select></label>' +
+    '<div class="group" data-show="rule.result=hold"><b>검수거부사유서 (별지서식 2호)</b><div class="fields">' +
+    '<label class="f wide">대상 품목<select id="rejItem" data-p="rule.rej.item"></select></label>' +
+    '<label class="f">규격<input data-p="rule.rej.spec"></label>' +
+    '<label class="f">제조회사<input data-p="rule.rej.maker"></label>' +
+    '<label class="f wide">거부 사유<textarea data-p="rule.rej.reason" placeholder="현품이 다른 점, 변질이나 감손 상태 등"></textarea></label>' +
+    '<label class="f wide">비고<input data-p="rule.rej.note"></label>' +
+    '<label class="f">검수자 성명<input data-p="rule.rej.inspector"></label>' +
+    '<label class="f">확인자 성명<input data-p="rule.rej.confirmer"></label>' +
+    "</div>" + chk("rule.notified", "발주부서에 즉시 알림 (제6조 제2항)", 1) + chk("rule.carrier", "운송업자가 배달한 물품임 (제7조 제2호)", 1) + "</div>";
+
+  function renderItems() {
+    $("#items").innerHTML = S.items.map(function (it, i) {
+      var fields = ITEM_FIELDS.map(function (f) {
+        var num = f[0] === "qty" || f[0] === "price";
+        return '<label class="f' + (f[2] ? " wide" : "") + '">' + f[1] + '<input data-i="' + i + '" data-f="' + f[0] + '"' + (num ? ' inputmode="numeric"' : "") + ' value="' + esc(it[f[0]]) + '" autocomplete="off"></label>';
+      }).join("");
+      return '<div class="item"><header><span>' + (i + 1) + '번 품목</span><button class="btn sm" data-del="' + i + '"' + (S.items.length < 2 ? " disabled" : "") + '>삭제</button></header>' +
+        '<div class="fields">' + fields + '</div><div class="line" data-line="' + i + '"></div></div>';
+    }).join("");
+    $("#addItem").disabled = S.items.length >= 10;
+    updateLines();
+  }
+  function lineAmt(it) { return toNum(it.qty) * toNum(it.price); }
+  function total() { return S.items.reduce(function (a, it) { return a + lineAmt(it); }, 0); }
+  function updateLines() {
+    S.items.forEach(function (it, i) {
+      var el = $('[data-line="' + i + '"]');
+      if (el) el.innerHTML = "금액 <b>" + fmt(lineAmt(it)) + "</b>원 (수량 × 단가)";
+    });
+  }
+  function syncInputs() {
+    document.querySelectorAll("[data-p]").forEach(function (el) {
+      if (el.id === "amount" || el.dataset.p) {
+        var v = getp(el.dataset.p);
+        if (el.type === "checkbox") el.checked = !!v;
+        else if (document.activeElement !== el) el.value = v == null ? "" : v;
+      }
+    });
+  }
+  var rejSig = "";
+  function refreshRejItems() {
+    var sg = JSON.stringify(S.items.map(function (i) { return i.name; })) + S.rule.rej.item;
+    if (sg === rejSig) return; rejSig = sg;
+    var sel = $("#rejItem");
+    sel.innerHTML = S.items.map(function (it, i) { return '<option value="' + i + '">' + (i + 1) + "번 " + esc(it.name || "(품명 없음)") + "</option>"; }).join("");
+    if (+S.rule.rej.item >= S.items.length) S.rule.rej.item = "0";
+    sel.value = S.rule.rej.item;
+  }
+  function applyShow() {
+    document.querySelectorAll("[data-show]").forEach(function (el) {
+      var p = el.dataset.show.split("=");
+      el.hidden = String(getp(p[0])) !== p[1];
+    });
+    var campusDept = S.rule.campus === "glocal" ? "기획처 기획예산팀" : "관재처 관재팀";
+    $("#chipDept").textContent = S.rule.inspector === "dept" ? "검수 발주부서 (발주부서장)" : "검수 담당 " + campusDept;
+    $("#deptHint").textContent = "검수 담당 부서는 " + campusDept + "입니다 (제3조 제1항).";
+  }
+
+  /* 점검 */
+  var BIZ = /^\d{3}-\d{2}-\d{5}$/;
+  function fixBiz(v) { var d = String(v).replace(/\D/g, ""); return d.length === 10 ? d.slice(0, 3) + "-" + d.slice(3, 5) + "-" + d.slice(5) : null; }
+  var DATE = /^\d{4}\. \d{2}\. \d{2}\.$/;
+  function fixDate(v) {
+    var m = String(v).trim().match(/^(\d{4})\D+(\d{1,2})\D+(\d{1,2})\D*$/);
+    if (!m) return null;
+    var y = +m[1], mo = +m[2], d = +m[3], t = new Date(y, mo - 1, d);
+    if (t.getFullYear() !== y || t.getMonth() !== mo - 1 || t.getDate() !== d) return null;
+    return m[1] + ". " + ("0" + mo).slice(-2) + ". " + ("0" + d).slice(-2) + ".";
+  }
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var RRN = /\d{6}-?[1-4]\d{6}/;
+
+  function collect() {
+    var out = [];
+    function add(id, kind, level, msg, fix, fixLabel, art) { out.push({ id: id, kind: kind, level: level, msg: msg, fix: fix, fixLabel: fixLabel, art: art }); }
+    var r = S.recv, s = S.sup, R = S.rule;
+
+    /* 개인정보 */
+    var texts = [];
+    ["recv", "sup"].forEach(function (g) { Object.keys(S[g]).forEach(function (k) { texts.push([g + "." + k, S[g][k]]); }); });
+    S.items.forEach(function (it, i) { Object.keys(it).forEach(function (k) { texts.push(["items." + i + "." + k, it[k]]); }); });
+    ["reason", "note", "spec", "maker"].forEach(function (k) { texts.push(["rule.rej." + k, R.rej[k]]); });
+    texts.push(["taxEmail", S.taxEmail], ["head", S.head]);
+    texts.forEach(function (t) {
+      if (RRN.test(String(t[1]))) {
+        add("rrn:" + t[0], "개인정보", "err", "주민등록번호로 보이는 숫자가 들어 있습니다. 문서에 남기지 않는 것이 안전합니다.", function () {
+          var parts = t[0].split("."), o = S;
+          for (var i = 0; i < parts.length - 1; i++) o = o[parts[i]];
+          var key = parts[parts.length - 1];
+          o[key] = String(o[key]).replace(/\d{6}-?[1-4]\d{6}/g, "●●●●●●-●●●●●●●");
+        }, "가림 표시로 바꾸기");
+      }
+    });
+
+    /* 검수요강 */
+    var dept = R.campus === "glocal" ? "기획처 기획예산팀" : "관재처 관재팀";
+    if (R.inspector === "central") add("r3a", "요강", "ok", "검수 담당 부서 " + dept + "에서 검수합니다.", null, "", "제3조 제1항");
+    else {
+      if (!R.reason) add("r3b", "요강", "warn", "발주부서가 직접 검수하는 사유를 고르세요.", null, "", "제3조 제2항");
+      if (R.reason === "10" && R.campus === "glocal") add("r3c", "요강", "err", "특별회계 물품은 GLOCAL캠퍼스에서는 발주부서 검수 대상이 아닙니다.", null, "", "제3조 제2항 제10호");
+      if (R.nonBudget) {
+        if (!R.budgetHead) add("r3d", "요강", "warn", "예산부서 소속이 아닌 발주자가 검수할 때는 예산부서장의 확인이 필요합니다. 예산부서장 성명을 적으세요.", null, "", "제3조 제3항");
+      } else add("r3e", "요강", "info", "발주부서 검수는 발주부서장이 합니다.", null, "", "제3조 제3항");
+    }
+    var haveDocs = DOCS.filter(function (d) { return R.docs[d[0]]; }).map(function (d) { return d[0]; });
+    if (!haveDocs.length) add("r4a", "요강", R.tentative ? "warn" : "err", R.tentative ? "검수 자료가 하나도 없어 가검수로 진행합니다. 자료가 갖춰지는 대로 본검수를 해야 합니다." : "검수 자료가 없습니다. 자료가 없으면 검수할 수 없고, 발주부서장이 요청하면 가검수만 할 수 있습니다.", null, "", "제4조 제1항, 제5항");
+    else {
+      if (!R.docs.contract && !R.docs.statement) add("r6b", "요강", "err", "계약서와 거래명세서가 모두 없습니다. 계약서나 거래명세서에 따르지 않은 검수는 하지 않습니다.", null, "", "제6조 제1항 제2호");
+      var need = ["order", "expend"].filter(function (k) { return !R.docs[k]; }).map(function (k) { return DOC_NAME[k]; });
+      if (need.length) add("r4b", "요강", "warn", "검수 자료에 " + need.join(", ") + "가 빠져 있습니다. 자료와 현품을 대조하려면 갖춰 두세요.", null, "", "제4조 제1항");
+      if (R.tentative) add("r4c", "요강", "warn", "가검수입니다. 발주자료가 갖춰지는 대로 본검수를 해야 합니다.", null, "", "제4조 제5항");
+    }
+    if (!R.requested) add("r6c", "요강", "warn", "발주부서의 검수 요청 여부를 확인하세요. 요청이 없으면 검수하지 않습니다.", null, "", "제6조 제1항 제3호");
+    if (!R.closed) add("r6a", "요강", "warn", "구매절차가 끝났는지 확인하세요. 끝나지 않은 물품구입은 검수하지 않습니다.", null, "", "제6조 제1항 제1호");
+    if (!R.notUsed) add("r5", "요강", "warn", "검수 전에 사용하지 않았는지 확인하세요. 검수 전 사용은 금지됩니다.", null, "", "제5조");
+    if (R.result === "hold") {
+      add("r6d", "요강", "warn", "검수 유보입니다. 검수거부사유서(별지서식 2호)를 붙여 즉시 발주부서에 알려야 합니다. 서식22의 ‘이상없음을 확인함’ 문구와 서명은 이 경우 맞지 않으니 확인하세요.", null, "", "제6조 제2항");
+      if (!String(R.rej.reason).trim()) add("r6e", "요강", "err", "검수거부사유서의 거부 사유가 비어 있습니다.", null, "", "별지서식 2호");
+      var miss2 = []; if (!R.rej.inspector) miss2.push("검수자"); if (!R.rej.confirmer) miss2.push("확인자");
+      if (miss2.length) add("r6f", "요강", "warn", "검수거부사유서의 " + miss2.join(", ") + " 성명이 비어 있습니다.", null, "", "별지서식 2호");
+      if (!R.notified) add("r6g", "요강", "warn", "발주부서에 즉시 알렸는지 확인하세요.", null, "", "제6조 제2항");
+      if (R.carrier) add("r7", "요강", "info", "운송업자가 배달한 물품은 운송업자와 관계자가 입회한 자리에서 확인서를 만들어 증거로 보관해야 합니다.", null, "", "제7조 제2호");
+    }
+
+    /* 요건: 빈 칸 */
+    var miss = [];
+    if (!r.name) miss.push("공급받는자 상호");
+    if (!r.biz) miss.push("공급받는자 등록번호");
+    if (!r.rep) miss.push("공급받는자 성명");
+    if (!r.date) miss.push("일자");
+    if (!s.name) miss.push("공급자 상호");
+    if (!s.biz) miss.push("공급자 등록번호");
+    if (!s.rep) miss.push("공급자 성명");
+    if (!S.taxEmail) miss.push("전자세금계산서 발급요청 이메일");
+    if (!S.head) miss.push("담당교수 및 부(센터)장 성명");
+    if (miss.length) add("miss", "요건", "warn", "비어 있는 칸이 있습니다. " + miss.join(", "));
+    S.items.forEach(function (it, i) {
+      var m = [];
+      if (!it.name) m.push("품명"); if (!it.model) m.push("납품모델명"); if (!it.place) m.push("사용장소");
+      if (!it.dept) m.push("사용자 소속"); if (!it.user) m.push("사용자"); if (!it.recv) m.push("인수자");
+      if (m.length) add("imiss" + i, "요건", "warn", (i + 1) + "번 품목에 비어 있는 칸이 있습니다. " + m.join(", "));
+      var q = toNum(it.qty), p = toNum(it.price);
+      if (!(q >= 1) || q !== Math.floor(q)) add("qty" + i, "요건", "err", (i + 1) + "번 품목 수량은 1 이상의 정수여야 합니다.");
+      if (!(p > 0)) add("price" + i, "요건", "err", (i + 1) + "번 품목 단가를 입력하세요.");
+    });
+    if (a4over) add("a4", "점검", "warn", "1면 내용이 A4 한 장(여백 15mm)을 넘습니다. 품목을 줄이거나 두 장으로 나누어 작성하세요.");
+    if (!photos[0] || !photos[1]) add("photo", "요건", "warn", "사진" + (!photos[0] && !photos[1] ? "1, 사진2" : !photos[0] ? "1" : "2") + "이 첨부되지 않았습니다.");
+
+    /* 검산 */
+    var sum = total(), amt = toNum(S.amount);
+    if (!S.amount) add("amt0", "검산", "warn", "발주금액이 비어 있습니다. 품목 합계는 " + fmt(sum) + "원입니다.", function () { S.amount = String(sum); }, "합계로 채우기");
+    else if (amt !== sum) add("amt", "검산", "err", "발주금액 " + fmt(amt) + "원과 품목 합계 " + fmt(sum) + "원이 다릅니다. 차이 " + fmt(Math.abs(amt - sum)) + "원.", function () { S.amount = String(sum); }, "발주금액을 합계로 맞추기");
+    else add("amtok", "검산", "ok", "발주금액과 품목 합계가 " + fmt(sum) + "원으로 같습니다.");
+
+    /* 점검: 형식 */
+    [["recv", "공급받는자"], ["sup", "공급자"]].forEach(function (g) {
+      var v = S[g[0]].biz;
+      if (v && !BIZ.test(v)) {
+        var f = fixBiz(v);
+        add("biz:" + g[0], "점검", "warn", g[1] + " 등록번호 형식이 000-00-00000과 다릅니다. (" + v + ")", f ? function () { S[g[0]].biz = f; } : null, f ? "'" + f + "'로 바꾸기" : "");
+      }
+    });
+    if (r.date && !DATE.test(r.date)) {
+      var fd = fixDate(r.date);
+      add("date", "점검", "warn", "일자 형식이 0000. 00. 00.과 다릅니다. (" + r.date + ")", fd ? function () { S.recv.date = fd; } : null, fd ? "'" + fd + "'로 바꾸기" : "");
+    }
+    if (S.taxEmail && !EMAIL.test(S.taxEmail)) add("temail", "점검", "warn", "세금계산서 발급요청 이메일 형식을 확인하세요.");
+    if (r.email && !EMAIL.test(r.email)) add("remail", "점검", "warn", "공급받는자 이메일 형식을 확인하세요.");
+    return out;
+  }
+
+  function sig(i) { return i.id + "|" + JSON.stringify([S.recv, S.sup, S.amount, S.items.length, S.rule, i.msg]); }
+
+  var A4W = 794, A4H = 1123, A4M = 57, a4over = false, a4used = 0, lastOver = false, noticeHidden = false;
+  function fitPapers() {
+    var box = $("#sheets"); if (!box || box.offsetParent === null) return;
+    var k = Math.min(1, (box.clientWidth - 28) / A4W); if (!(k > 0)) return;
+    document.querySelectorAll(".sheet").forEach(function (sh) {
+      var p = sh.firstElementChild; p.style.transform = "scale(" + k + ")"; sh.style.width = Math.round(A4W * k) + "px"; sh.style.height = Math.round(p.offsetHeight * k) + "px";
+    });
+    var pg = $("#paper1 .pg"); a4used = pg ? pg.offsetHeight : 0; a4over = a4used > A4H - 2 * A4M;
+    $("#paper1").classList.toggle("over", a4over);
+    var chip = $("#a4Chip"); chip.textContent = "A4 210×297mm · 1면 " + Math.round(a4used / (A4H - 2 * A4M) * 100) + "% 사용"; chip.className = "chip" + (a4over ? " warn" : "");
+  }
+  var visible = [];
+  function checklist() {
+    var R = S.rule, r = S.recv, s = S.sup, sum = total(), amt = toNum(S.amount), B = function (x) { return !!x; };
+    var itemsOk = S.items.every(function (it) { return it.name && it.model && it.place && it.dept && it.user && it.recv && toNum(it.qty) >= 1 && toNum(it.price) > 0; });
+    var instOk = R.inspector === "central" || (R.reason && !(R.reason === "10" && R.campus === "glocal") && (!R.nonBudget || R.budgetHead));
+    var docsOk = (R.docs.contract || R.docs.statement) && R.docs.order && R.docs.expend;
+    var holdOk = R.result !== "hold" || (String(R.rej.reason).trim() && R.rej.inspector && R.rej.confirmer && R.notified);
+    return [
+      { name: "필수 항목", items: [["공급받는자", B(r.name && r.biz && r.rep && r.date)], ["공급자", B(s.name && s.biz && s.rep)], ["품목 기재", B(itemsOk)], ["세금계산서 이메일", EMAIL.test(S.taxEmail)], ["담당교수 및 부(센터)장", B(S.head)]] },
+      { name: "검수요강", items: [["검수 주체·사유", B(instOk)], ["검수 자료", B(docsOk)], ["검수 요청", B(R.requested)], ["구매절차 종결", B(R.closed)], ["검수 전 사용 안 함", B(R.notUsed)], [R.result === "hold" ? "검수거부사유서" : "검수 결과 이상 없음", B(holdOk) && R.result !== "hold"]] },
+      { name: "검산", items: [["발주금액 = 합계", B(amt && amt === sum)], ["금액 한글 표기", amt > 0]] },
+      { name: "증빙", items: [["사진1", B(photos[0])], ["사진2", B(photos[1])]] }
+    ];
+  }
+  function renderProgress(score) {
+    var g = checklist();
+    $("#progCard").innerHTML =
+      '<div class="prog-top"><div class="ring" style="--p:' + score + '"><b>' + score + '</b><small>점수</small></div><div class="bars">' +
+      g.map(function (x) { var ok = x.items.filter(function (i) { return i[1]; }).length; return '<div class="brow"><span>' + x.name + '</span><i><s style="width:' + Math.round(ok / x.items.length * 100) + '%"></s></i><em>' + ok + "/" + x.items.length + "</em></div>"; }).join("") +
+      '</div></div><ul class="dots">' + g.map(function (x) { return x.items.map(function (i) { return '<li class="' + (i[1] ? "" : "no-ok") + '">' + esc(i[0]) + "</li>"; }).join(""); }).join("") + "</ul>";
+  }
+  function renderResults() {
+    var all = collect().filter(function (i) { return S.scope[i.kind] !== false; });
+    visible = all.filter(function (i) { return !rejected[sig(i)]; });
+    var order = { err: 0, warn: 1, info: 2, ok: 3 };
+    visible.sort(function (a, b) { return order[a.level] - order[b.level]; });
+    var bad = visible.filter(function (i) { return i.level === "err" || i.level === "warn"; });
+    var errN = bad.filter(function (i) { return i.level === "err"; }).length;
+    var score = Math.max(0, 100 - errN * 12 - (bad.length - errN) * 4);
+    renderProgress(score);
+    $("#issueCount").textContent = "확인 필요 " + bad.length + "건";
+    $("#issues").innerHTML = visible.map(function (i, n) {
+      return '<li class="issue ' + i.level + '"><div class="ih"><span class="tag">' + i.kind + "</span>" + (i.art ? '<span class="art">' + esc(i.art) + "</span>" : "") + '</div><div class="msg py">' + esc(i.msg) + "</div>" +
+        (i.fix ? '<div class="acts"><button class="btn sm primary" data-acc="' + n + '">수락: ' + esc(i.fixLabel) + '</button><button class="btn sm" data-rej="' + n + '">거절</button></div>' : "") + "</li>";
+    }).join("") || '<li class="issue ok"><div class="ih"><span class="tag">완료</span></div><div class="msg py">지적할 사항이 없습니다.</div></li>';
+  }
+
+  /* 미리보기 */
+  function v(x, ph) { return x ? esc(x) : '<span class="ph">' + esc(ph || "") + "</span>"; }
+  function renderPaper() {
+    var r = S.recv, s = S.sup, R = S.rule, sum = total(), amt = toNum(S.amount);
+    var rows = S.items.map(function (it, i) {
+      return '<tr><td class="ctr" style="font-weight:400">' + (i + 1) + '</td>' +
+        '<td class="stack"><div>' + v(it.name) + '</div><div>' + v(it.model) + '</div><div>' + v(it.place) + '</div></td>' +
+        '<td class="ctr" style="font-weight:400">' + v(it.qty) + '</td>' +
+        '<td class="num">' + (toNum(it.price) ? fmt(toNum(it.price)) : "") + '</td>' +
+        '<td class="num">' + (lineAmt(it) ? fmt(lineAmt(it)) : "") + '</td>' +
+        '<td class="stack"><div>' + v(it.dept) + '</div><div>' + v(it.user) + '</div></td>' +
+        '<td class="ctr" style="font-weight:400">' + v(it.recv) + "</td></tr>";
+    }).join("");
+    $("#paper1").innerHTML = '<div class="pg">' + (isSample ? '<span class="stamp">예시</span>' : "") +
+      '<div class="code">[서식22] 납품 확인 및 검수조서</div><h3><span>납품 확인 및 검수조서</span></h3>' +
+      '<table class="doc"><colgroup><col style="width:22px"><col style="width:7%"><col style="width:19%"><col style="width:7%"><col style="width:17%"><col style="width:22px"><col style="width:7%"><col style="width:19%"><col style="width:7%"><col style="width:17%"></colgroup>' +
+      '<tr><td class="vert" rowspan="5">공급<br>받는<br>자</td><td class="lab">상호</td><td colspan="3" style="text-align:center;font-weight:700">' + v(r.name) + '</td>' +
+      '<td class="vert" rowspan="5">공<br>급<br>자</td><td class="lab">상호</td><td colspan="3">' + v(s.name) + "</td></tr>" +
+      '<tr><td class="lab">등록<br>번호</td><td>' + v(r.biz, "000-00-00000") + '</td><td class="lab">성명</td><td>' + v(r.rep) + '</td><td class="lab">등록<br>번호</td><td>' + v(s.biz) + '</td><td class="lab">성명</td><td>' + v(s.rep) + "</td></tr>" +
+      '<tr><td class="lab">주소</td><td colspan="3">' + v(r.addr) + '</td><td class="lab">주소</td><td colspan="3">' + v(s.addr) + "</td></tr>" +
+      '<tr><td class="lab">일자</td><td>' + v(r.date, "2026. 00. 00.") + '</td><td class="lab">전화</td><td style="white-space:nowrap">' + v(r.tel, "02-000-0000") + '</td><td class="lab">업태</td><td>' + v(s.type) + '</td><td class="lab">종목</td><td>' + v(s.item) + "</td></tr>" +
+      '<tr><td class="lab">email</td><td colspan="3">' + v(r.email, "0000@konkuk.ac.kr") + '</td><td class="lab">전화</td><td colspan="3">' + v(s.tel) + "</td></tr>" +
+      '<tr><td class="ctr" colspan="10">아래와 같이 납품합니다.</td></tr>' +
+      '<tr><td class="ctr" colspan="3" style="font-size:11px">발주금액<br>(부가세포함)</td><td colspan="7" class="red">일금 (金' + (amt ? kor(amt) : "") + "원 " + (amt ? fmt(amt) : "") + ")</td></tr></table>" +
+      '<table class="doc" style="margin-top:-1px"><colgroup><col style="width:6%"><col style="width:34%"><col style="width:7%"><col style="width:13%"><col style="width:14%"><col style="width:18%"><col style="width:8%"></colgroup>' +
+      '<tr><th>No.</th><th style="padding:0"><div style="padding:3px;border-bottom:1px solid #111">품명(용역명)</div><div style="padding:3px;border-bottom:1px solid #111">납품모델명(기자재,연구장비 등)</div><div style="padding:3px">사용장소(용역 실시 장소)</div></th><th>수량</th><th>단가(원)</th><th>금액(원)</th><th style="padding:0"><div style="padding:3px;border-bottom:1px solid #111">사용자 소속</div><div style="padding:3px">사용자</div></th><th>인수자</th></tr>' +
+      rows +
+      '<tr><td class="grey ctr" colspan="4" style="letter-spacing:.4em">합 계</td><td class="num grey" style="font-weight:700">' + (sum ? fmt(sum) : "-") + '</td><td colspan="2"></td></tr>' +
+      '<tr><td colspan="7" style="font-size:10.5px">- 전자세금계산서 발급요청 : ' + (S.taxEmail ? '<u>' + esc(S.taxEmail) + "</u>" : '<span class="ph">__________@konkuk.ac.kr</span>') + "</td></tr></table>" +
+      '<p class="date">' + (r.date ? esc(r.date) : '<span class="ph">0000.&nbsp;&nbsp;&nbsp;00.&nbsp;&nbsp;&nbsp;00.</span>') + "</p>" +
+      '<p class="sign" style="margin:0 0 14px">상기 물품(용역)의 이상없음을 확인함.</p>' +
+      '<p class="sign">담당교수 및 부(센터)장 : ' + (S.head ? esc(S.head) : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") + " &nbsp;&nbsp;(인)</p></div>";
+    $("#paper2").innerHTML = '<div class="pg2">' + (isSample ? '<span class="stamp">예시</span>' : "") +
+      '<div class="code">[서식22] 납품 확인 및 검수조서</div>' +
+      [0, 1].map(function (i) { return '<div class="photobox"><b>[사진' + (i + 1) + "]</b><div>" + (photos[i] ? '<img alt="사진' + (i + 1) + '" src="' + photos[i] + '">' : '<span class="ph">사진을 첨부하면 이 칸에 들어갑니다</span>') + "</div></div>"; }).join("") + "</div>";
+
+    var p3 = $("#paper3");
+    $("#sheet3").hidden = R.result !== "hold";
+    if (R.result === "hold") {
+      var it = S.items[+R.rej.item] || S.items[0] || newItem();
+      p3.innerHTML = '<div class="pg2" style="height:auto"><div class="code">(별지서식 2호)</div><h3><span>검수거부사유서</span></h3>' +
+        '<table class="doc"><colgroup><col style="width:22%"><col></colgroup>' +
+        [["품 명", v(it.name)], ["규 격", v(R.rej.spec || it.model)], ["제조회사", v(R.rej.maker)], ["수 량", v(it.qty)], ["금액(단가)", toNum(it.price) ? fmt(toNum(it.price)) : ""], ["납 품 처", v(s.name)]]
+          .map(function (x) { return '<tr class="rej"><td>' + x[0] + "</td><td>" + x[1] + "</td></tr>"; }).join("") +
+        '<tr class="rej"><td>거부사유</td><td style="height:120px;vertical-align:top;white-space:pre-wrap">' + v(R.rej.reason) + "</td></tr>" +
+        '<tr class="rej"><td>비 고</td><td style="height:60px;vertical-align:top">' + v(R.rej.note) + "</td></tr></table>" +
+        '<p class="date">' + (r.date ? esc(r.date) : '<span class="ph">년&nbsp;&nbsp;&nbsp;월&nbsp;&nbsp;&nbsp;일</span>') + "</p>" +
+        '<p class="sign">검 수 자 &nbsp;' + v(R.rej.inspector, "") + ' &nbsp;&nbsp;(인)</p><p class="sign">확 인 자 &nbsp;' + v(R.rej.confirmer, "") + " &nbsp;&nbsp;(인)</p></div>";
+    }
+  }
+
+  /* AI */
+  function setAi(st) {
+    aiState = st;
+    var lab = { checking: "Claude 확인 중", off: "Claude 미연결 · 연결하기", on: "Claude 연결됨", basic: "기본 규칙 · 연결하기" }[st];
+    $("#aiLabel").textContent = lab; $("#aiBtn").className = "aipill " + (st === "on" ? "is-on" : "");
+    var stat = { checking: "연결 가능 여부를 확인하는 중입니다.", off: aiAvail ? "AI가 연결되지 않았습니다. 아래에서 연결 방식을 고르세요." : "이 보기에서는 계정 연결을 쓸 수 없습니다. claude.ai에서 열거나 채팅창 방식을 쓰세요.", on: "본인 Claude 계정으로 연결되었습니다. 사용량은 본인 한도에서 차감됩니다.", basic: "AI 없이 기본 규칙으로 점검합니다." }[st];
+    $("#aiStat").textContent = stat;
+    $("#optAcct").disabled = !aiAvail || st === "on";
+    $("#aiNotice").hidden = !(st === "off" && !basicPref && !noticeHidden);
+    $("#aiPanel").hidden = !aiNotes.length;
+  }
+  if (window.claude && window.claude.use) {
+    window.claude.use("sample").then(function (s) { SAMPLE = s; aiAvail = !!s; setAi(basicPref ? "basic" : "off"); }, function () { aiAvail = false; setAi(basicPref ? "basic" : "off"); });
+  } else { setTimeout(function () { setAi(basicPref ? "basic" : "off"); }, 0); }
+
+  var RULES_TEXT = "건국대학교 검수요강(개정 2025. 10. 1.) 요지:\n" +
+    "- 제3조 검수는 관재처 관재팀(글로컬은 기획처 기획예산팀)이 한다. 차량유지, 화환·기념품, 업무추진비 물품, 실험실습비 소모품, 도서관 도서·전자정보원, 구매계약업무요강 제3조제4항 구매·용역·시설공사, 특별회계 물품(글로컬 제외), 농·축·수·임산물·수목·화훼류는 발주부서가 검수할 수 있고 이때 발주부서장이 검수한다. 예산부서 소속이 아닌 자가 발주하면 발주자가 검수하고 예산부서장이 확인한다.\n" +
+    "- 제4조 발주부서는 발주서, 지출결의서, 거래명세서, 계약서, 시방서, 사양서, 도면 등을 검수부서에 보낸다. 검수자는 자료와 현품의 품질, 수량, 기타 조건을 대조하고, 검수 후 서류에 서명한다. 자료가 없으면 검수할 수 없으나 발주부서장이 요청하면 가검수를 하고 자료가 갖춰지면 본검수를 한다.\n" +
+    "- 제5조 검수 전 사용 금지.\n" +
+    "- 제6조 구매절차 미종결, 계약서·거래명세서에 따르지 않은 검수, 발주부서의 검수 요청이 없는 경우는 검수하지 않는다. 자료나 지출결의서, 청구서와 현품이 다르거나 변질, 감손, 공사불량 등 이상이 있으면 검수를 유보하고 검수거부사유서(별지서식 2호)를 붙여 즉시 발주부서에 알린다.\n" +
+    "- 제7조 운송업자가 배달한 물품에 이상이 있으면 운송업자와 관계자 입회하에 확인서를 작성해 보관한다.";
+  var RRN_G = /\d{6}-?[1-4]\d{6}/g, EMAIL_G = /[^\s@]+@[^\s@]+\.[^\s@]+/g, TEL_G = /0\d{1,2}[-. ]?\d{3,4}[-. ]?\d{4}/g;
+  function mask(s) { return String(s == null ? "" : s).replace(RRN_G, "⟦주민번호⟧").replace(EMAIL_G, "⟦이메일⟧").replace(TEL_G, "⟦전화⟧"); }
+  function docSummary() {
+    var R = S.rule, s = S.sup, L = [];
+    L.push("캠퍼스: " + (R.campus === "glocal" ? "글로컬" : "서울"));
+    L.push("검수 주체: " + (R.inspector === "dept" ? "발주부서 검수 (사유: " + ((REASONS.filter(function (x) { return x[0] === R.reason; })[0] || ["", "미선택"])[1]) + ", 발주자가 예산부서 소속 아님: " + (R.nonBudget ? "예" : "아니오") + ", 예산부서장 확인 기재: " + (R.budgetHead ? "있음" : "없음") + ")" : "검수 담당 부서"));
+    L.push("검수 자료 구비: " + (DOCS.filter(function (d) { return R.docs[d[0]]; }).map(function (d) { return d[1]; }).join(", ") || "없음") + (R.tentative ? " / 가검수" : ""));
+    L.push("검수 요청 있음: " + (R.requested ? "예" : "아니오") + ", 구매절차 종결: " + (R.closed ? "예" : "아니오") + ", 검수 전 사용 안 함: " + (R.notUsed ? "예" : "아니오"));
+    L.push("검수 결과: " + (R.result === "hold" ? "유보 (거부 사유: " + mask(R.rej.reason) + ", 발주부서 통보: " + (R.notified ? "예" : "아니오") + ", 운송업자 배달: " + (R.carrier ? "예" : "아니오") + ")" : "이상 없음"));
+    L.push("공급자 상호: " + mask(s.name) + ", 발주금액(부가세 포함): " + fmt(toNum(S.amount)) + "원, 품목 합계: " + fmt(total()) + "원");
+    S.items.forEach(function (it, i) { L.push((i + 1) + "번 품목: " + mask(it.name) + " / 모델 " + mask(it.model) + " / 사용장소 " + mask(it.place) + " / 수량 " + it.qty + " × 단가 " + fmt(toNum(it.price)) + " = " + fmt(lineAmt(it)) + "원 / 사용자·인수자 기재 " + (it.user && it.recv ? "있음" : "없음")); });
+    L.push("확인일 기재: " + (S.recv.date ? "있음" : "없음") + ", 담당교수 및 부(센터)장 기재: " + (S.head ? "있음" : "없음") + ", 사진: " + photos.filter(Boolean).length + "장");
+    return L.join("\n");
+  }
+  var AI_FORMAT = '답은 JSON 배열만 쓰세요. 항목은 최대 8개이며 각 항목은 {"level":"err|warn|info","article":"관련 조항","title":"한 줄 제목","detail":"무엇을 어떻게 고치면 되는지 1~2문장"} 형태입니다. 문제가 없으면 빈 배열 []을 쓰세요.';
+  function aiPrompt() {
+    return "당신은 대학 행정 문서 검수 도우미입니다. 아래 검수요강과 납품 확인 및 검수조서(서식22) 작성 내용을 대조해, 요강에 어긋나거나 빠진 점, 서류 사이의 모순을 찾아 주세요. 성명, 연락처는 일부러 제외했습니다. 요강에 없는 내용은 지어내지 마세요.\n\n" + RULES_TEXT + "\n\n[작성 내용]\n" + docSummary() + "\n\n" + AI_FORMAT;
+  }
+  function showNotes(arr) {
+    aiNotes = arr; renderAi();
+  }
+  function renderAi() {
+    $("#aiList").innerHTML = aiNotes.map(function (n) {
+      var lv = n.level === "err" ? "err" : n.level === "warn" ? "warn" : "info";
+      return '<li class="issue ' + lv + '"><div><span class="tag">AI</span><b>' + esc(n.title || "") + '</b> ' + (n.article ? '<span class="art">' + esc(n.article) + "</span>" : "") + "<br>" + esc(n.detail || n.raw || "") + "</div></li>";
+    }).join("");
+    $("#aiPanel").hidden = !aiNotes.length;
+  }
+  function aiErr(e) {
+    var c = e && e.code, m = { not_granted: "Claude 사용을 허용하지 않아 연결되지 않았습니다.", rate_limited: "요청이 많거나 사용 한도에 닿았습니다. 잠시 뒤 다시 시도하세요.", session_expired: "다시 로그인한 뒤 시도하세요.", sampling_disabled: "이 계정에서는 Claude를 쓸 수 없습니다.", invalid_json: "AI 답을 읽지 못했습니다. 다시 시도하세요.", refused: "AI가 이 내용을 처리하지 않았습니다." }[c];
+    return m || (c === "cancelled" ? "" : "AI 호출에 실패했습니다. 다시 시도하세요.");
+  }
+  function connect() {
+    if (!SAMPLE) { toast("이 보기에서는 계정 연결을 쓸 수 없습니다"); return; }
+    $("#aiStat").textContent = "허용 여부를 확인하는 중입니다.";
+    SAMPLE("연결 확인입니다. ‘확인’ 두 글자만 답하세요.", { modelTier: "quick", cache: false }).then(function () { setAi("on"); toast("Claude에 연결했습니다"); closePops(); },
+      function (e) { setAi("off"); toast(aiErr(e) || "연결하지 못했습니다"); });
+  }
+  $("#aiRun").addEventListener("click", function () {
+    if (aiState !== "on" || !SAMPLE) { openPop("aiPop", "aiBtn"); return; }
+    ctl = new AbortController(); $("#aiPanel").hidden = false;
+    $("#aiRun").disabled = true; $("#aiStop").hidden = false; $("#aiMsg").textContent = "생각하는 중입니다. 조금 걸릴 수 있습니다.";
+    SAMPLE.json(aiPrompt(), { signal: ctl.signal, cache: false }).then(function (data) {
+      var arr = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
+      $("#aiMsg").textContent = arr.length ? "AI 의견 " + arr.length + "건. 제안으로만 참고하세요." : "AI가 지적한 사항이 없습니다.";
+      showNotes(arr);
+    }, function (e) { $("#aiMsg").textContent = aiErr(e); if (e && e.code === "not_granted") setAi("off"); }).then(function () { $("#aiStop").hidden = true; $("#aiRun").disabled = false; });
+  });
+  $("#aiStop").addEventListener("click", function () { if (ctl) ctl.abort(); });
+  $("#optAcct").addEventListener("click", connect);
+  $("#optBasic").addEventListener("click", function () { basicPref = true; try { localStorage.setItem("geomsu.basic", "1"); } catch (e) {} setAi("basic"); closePops(); toast("기본 규칙으로 점검합니다"); });
+  $("#noticeConn").addEventListener("click", connect);
+  $("#noticeOpen").addEventListener("click", function () { openPop("aiPop", "aiBtn"); });
+  $("#noticeClose").addEventListener("click", function () { noticeHidden = true; $("#aiNotice").hidden = true; });
+  $("#optChat").addEventListener("click", function () { closePops(); var d = $("#chatDet"); d.open = true; d.scrollIntoView({ block: "center" }); });
+  $("#chatCopy").addEventListener("click", function () { copyText(aiPrompt(), "요청문을 복사했습니다. Claude 대화에 붙여 넣으세요"); });
+  $("#chatApply").addEventListener("click", function () {
+    var raw = $("#chatAns").value.trim(); if (!raw) return;
+    var arr = null; try { var m = raw.match(/\[[\s\S]*\]/); arr = JSON.parse(m ? m[0] : raw); } catch (e) {}
+    if (Array.isArray(arr)) showNotes(arr.filter(function (x) { return x && typeof x === "object"; })); else showNotes([{ level: "info", title: "Claude 답변", raw: raw.slice(0, 4000) }]);
+    $("#aiMsg").textContent = "채팅창에서 받은 답입니다. 제안으로만 참고하세요."; $("#aiPanel").hidden = false; pyramidSoon();
+  });
+
+
+  /* 명세서 불러오기 */
+  var impData = null, impImg = null;
+  function impKind() { return document.querySelector('input[name="impKind"]:checked').value; }
+  function impPrompt(text) {
+    return "다음 " + impKind() + " (건국대학교 납품 검수조서 작성용)에서 값을 읽어 JSON 객체 하나로만 답하세요. 설명이나 코드블록은 쓰지 마세요.\n" +
+      '형식: {"supplier":{"name":"","biz":"","rep":"","addr":"","type":"","item":"","tel":""},"receiver":{"name":"","biz":"","rep":"","addr":"","tel":"","email":""},"date":"YYYY-MM-DD","total":0,"items":[{"name":"","model":"","qty":0,"price":0}]}\n' +
+      "규칙: 문서에 적힌 값만 옮기고 없으면 빈 문자열(숫자는 0)로 둡니다. supplier는 공급자(판매자), receiver는 공급받는자(구매자)입니다. biz는 숫자 10자리만, total은 부가세 포함 합계금액, price는 부가세 제외 단가가 아니라 문서에 적힌 단가 그대로입니다. items의 model은 규격이며 숫자는 쉼표 없이 씁니다. 주민등록번호는 옮기지 않습니다." +
+      (text ? "\n\n[문서 내용]\n" + String(text).replace(RRN_G, "⟦주민번호⟧").slice(0, 12000) : "\n\n문서는 첨부한 이미지입니다.");
+  }
+  function impParse(raw) {
+    var o = raw;
+    if (typeof raw === "string") { try { var m = raw.match(/\{[\s\S]*\}/); o = JSON.parse(m ? m[0] : raw); } catch (e) { return null; } }
+    if (!o || typeof o !== "object") return null;
+    var n = function (v) { return String(v == null ? "" : v).replace(/[^\d]/g, ""); }, t = function (v) { return String(v == null ? "" : v).trim(); };
+    var sp = o.supplier || {}, rc = o.receiver || {};
+    return {
+      sup: { name: t(sp.name), biz: n(sp.biz), rep: t(sp.rep), addr: t(sp.addr), type: t(sp.type), item: t(sp.item), tel: t(sp.tel) },
+      recv: { name: t(rc.name), biz: n(rc.biz), rep: t(rc.rep), addr: t(rc.addr), tel: t(rc.tel), email: t(rc.email) },
+      date: /^\d{4}-\d{2}-\d{2}$/.test(t(o.date)) ? t(o.date) : "", total: n(o.total),
+      items: (Array.isArray(o.items) ? o.items : []).map(function (x) { return { name: t(x && x.name), model: t(x && x.model), qty: n(x && x.qty) || "1", price: n(x && x.price) }; }).filter(function (x) { return x.name || x.price; })
+    };
+  }
+  function impShow(d) {
+    impData = d; var box = $("#impRes"); box.hidden = false;
+    if (!d) { box.innerHTML = "<b>읽지 못했습니다</b><span>형식이 맞지 않습니다. 다시 시도하거나 내용을 확인하세요.</span>"; return; }
+    box.innerHTML = "<b>" + esc(impKind()) + "에서 읽은 내용</b>" +
+      "<span>공급자 " + esc(d.sup.name || "-") + " · " + esc(d.sup.biz || "-") + "</span><span>공급받는자 " + esc(d.recv.name || "-") + " · " + esc(d.recv.biz || "-") + "</span>" +
+      "<span>합계 " + (d.total ? fmt(+d.total) + "원" : "-") + (d.date ? " · 일자 " + esc(d.date) : "") + "</span>" +
+      "<ul>" + d.items.map(function (x) { return "<li>" + esc(x.name || "-") + (x.model ? " (" + esc(x.model) + ")" : "") + " × " + esc(x.qty) + " @ " + fmt(+x.price || 0) + "</li>"; }).join("") + "</ul>" +
+      '<div class="row"><button class="btn primary sm" id="impApply">검수조서에 채우기</button><span class="hint">공급받는자 칸이 이미 있으면 건국대 기본 값은 유지합니다.</span></div>';
+  }
+  function impApply() {
+    var d = impData; if (!d) return;
+    Object.keys(d.sup).forEach(function (k) { if (d.sup[k]) S.sup[k] = d.sup[k]; });
+    ["biz", "rep", "tel", "email"].forEach(function (k) { if (d.recv[k]) S.recv[k] = d.recv[k]; });
+    if (d.recv.name && /건국|산학/.test(d.recv.name) === false && !S.recv.name) S.recv.name = d.recv.name;
+    if (d.date) S.recv.date = d.date;
+    if (d.total) S.amount = d.total;
+    if (d.items.length) S.items = d.items.map(function (x, i) { var o = S.items[i] || newItem(); o.name = x.name; o.model = x.model; o.qty = x.qty; o.price = x.price; return o; });
+    if (impKind() === "거래명세서") S.rule.docs.statement = true;
+    isSample = false; closePops(); fullRefresh(); toast("검수조서에 채웠습니다. 값을 확인하세요");
+  }
+  $("#impPop").addEventListener("click", function (e) { e.stopPropagation(); var b = e.target.closest("#impApply"); if (b) impApply(); });
+  var impDrop = $("#impDrop"), impFile = $("#impFile");
+  impDrop.addEventListener("click", function () { impFile.click(); });
+  impDrop.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); impFile.click(); } });
+  impFile.addEventListener("change", function () { impImg = impFile.files[0] || null; $("#impFileName").textContent = impImg ? impImg.name : "PDF는 열어서 글자를 복사해 아래에 붙여 넣으세요."; });
+  $("#impCopy").addEventListener("click", function () {
+    var t = $("#impText").value.trim(); if (!t) { toast("먼저 명세서 글자를 붙여 넣으세요"); return; }
+    $("#impAnsW").hidden = false; copyText(impPrompt(t), "요청문을 복사했습니다. Claude 대화에 붙여 넣고 받은 답을 아래 칸에 넣으세요");
+  });
+  $("#impAns").addEventListener("input", function () { var v = $("#impAns").value.trim(); if (v) impShow(impParse(v)); });
+  $("#impRun").addEventListener("click", function () {
+    var t = $("#impText").value.trim();
+    if (!t && !impImg) { toast("이미지를 올리거나 글자를 붙여 넣으세요"); return; }
+    if (aiState !== "on" || !SAMPLE) { $("#impAnsW").hidden = !t; openPop("aiPop", "aiBtn"); toast(t ? "Claude를 연결하거나 요청문 복사를 이용하세요" : "이미지는 Claude를 연결해야 읽을 수 있습니다"); return; }
+    var run = function (opts) {
+      $("#impRun").disabled = true; $("#impRun").textContent = "읽는 중";
+      SAMPLE.json(impPrompt(impImg ? "" : t), opts).then(function (o) { impShow(impParse(o)); }, function (e) { var b = $("#impRes"); b.hidden = false; b.innerHTML = "<b>읽지 못했습니다</b><span>" + esc(aiErr(e)) + "</span>"; })
+        .then(function () { $("#impRun").disabled = false; $("#impRun").textContent = "불러오기"; });
+    };
+    if (impImg) {
+      var lim = SAMPLE.limits ? SAMPLE.limits() : Promise.resolve(null);
+      Promise.resolve(lim).then(function (c) { if (!c || !c.images) { toast("이 보기에서는 이미지를 읽을 수 없습니다. 글자를 붙여 넣으세요"); return; } run({ images: impImg, cache: false }); }, function () { toast("이 보기에서는 이미지를 읽을 수 없습니다"); });
+    } else run({ cache: false });
+  });
+
+  /* 팝오버 */
+  var POPS = [["aiPop", "aiBtn"], ["tmPop", "tmBtn"], ["arcPop", "arcBtn"], ["impPop", "impBtn"]];
+  function closePops() { POPS.forEach(function (p) { $("#" + p[0]).hidden = true; $("#" + p[1]).setAttribute("aria-expanded", "false"); }); }
+  function openPop(id, btn) {
+    var wasOpen = !$("#" + id).hidden; closePops();
+    if (!wasOpen) { $("#" + id).hidden = false; $("#" + btn).setAttribute("aria-expanded", "true"); if (id === "tmPop") updateTeams(); pyramidSoon(); }
+  }
+  POPS.forEach(function (p) { $("#" + p[1]).addEventListener("click", function (e) { e.stopPropagation(); openPop(p[0], p[1]); }); $("#" + p[0]).addEventListener("click", function (e) { e.stopPropagation(); }); });
+  document.addEventListener("click", closePops);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePops(); });
+
+  /* Teams */
+  var TEAMS = "https://teams.microsoft.com/l/chat/0/0?users=coolzet%40konkuk.ac.kr";
+  function tmMessage() {
+    var t = $("#tmText").value.trim(), msg = "[검수김군 · " + $("#tmType").value + "] " + t;
+    if ($("#tmCtx").checked) { var tab = (location.hash || "#review").slice(1); msg += "\n(화면: " + ({ review: "검수", rules: "검수요강", checks: "점검 항목" }[tab] || "검수") + ", 문서: 서식22 납품 확인 및 검수조서, 품목 " + S.items.length + "개)"; }
+    return msg.slice(0, 1200);
+  }
+  function updateTeams() {
+    var m = tmMessage(); $("#tmLink").href = TEAMS + "&message=" + encodeURIComponent(m);
+    $("#tmMail").href = "mailto:coolzet@konkuk.ac.kr?subject=" + encodeURIComponent("[검수김군] " + $("#tmType").value) + "&body=" + encodeURIComponent(m);
+  }
+  ["#tmType", "#tmText", "#tmCtx"].forEach(function (s) { $(s).addEventListener("input", updateTeams); $(s).addEventListener("change", updateTeams); });
+  $("#tmCopy").addEventListener("click", function () { copyText(tmMessage(), "내용을 복사했습니다"); });
+
+  /* 작업·보관함 */
+  var ARC = [];
+  try { ARC = JSON.parse(localStorage.getItem("geomsu.arc") || "[]"); } catch (e) { ARC = []; }
+  function saveArc() { try { localStorage.setItem("geomsu.arc", JSON.stringify(ARC.slice(0, 10))); } catch (e) {} }
+  function archiveNow() {
+    if (isSample || JSON.stringify(S) === JSON.stringify(blank())) return false;
+    ARC.unshift({ t: Date.now(), title: (S.sup.name || "공급자 미기재") + " · " + ((S.items[0] && S.items[0].name) || "품목 미기재"), S: JSON.parse(JSON.stringify(S)) });
+    ARC = ARC.slice(0, 10); saveArc(); return true;
+  }
+  function renderArc() {
+    $("#arcCount").textContent = ARC.length;
+    $("#arcList").innerHTML = ARC.map(function (a, i) {
+      return '<li><span>' + esc(a.title) + "<small>" + new Date(a.t).toLocaleString("ko-KR") + '</small></span><button class="btn sm" data-arcload="' + i + '">불러오기</button><button class="btn sm" data-arcdel="' + i + '">삭제</button></li>';
+    }).join("") || '<li class="hint">보관한 작업이 없습니다.</li>';
+  }
+  $("#newBtn").addEventListener("click", function () {
+    var a = archiveNow(); S = blank(); isSample = false; rejected = {}; photos = [null, null]; aiNotes = []; renderAi(); closePops(); fullRefresh(); renderArc();
+    toast(a ? "지금 작업을 보관함에 넣고 새로 시작합니다" : "새 작업을 시작합니다");
+  });
+  $("#btnSample").addEventListener("click", function () { S = sample(); isSample = true; rejected = {}; closePops(); fullRefresh(); });
+  function clearAll() { S = blank(); isSample = false; rejected = {}; closePops(); fullRefresh(); }
+  $("#btnClear2").addEventListener("click", clearAll);
+  function fullRefresh() { rejSig = ""; syncInputs(); renderItems(); update(); }
+
+  function update() {
+    var amt = toNum(S.amount);
+    $("#amtKor").textContent = amt ? "일금 " + kor(amt) + "원정" : "-";
+    $("#sumTop").textContent = fmt(total());
+    updateLines(); applyShow(); refreshRejItems();
+    $("#sampleBar").hidden = !isSample;
+    renderResults(); renderPaper(); fitPapers(); if (a4over !== lastOver) { lastOver = a4over; renderResults(); } save();
+    $("#sum1").textContent = (S.recv.name || "미기재") + " ← " + (S.sup.name || "미기재");
+    $("#sum3").textContent = S.items.length + "개 · " + fmt(total()) + "원";
+    $("#sum4").textContent = "사진 " + photos.filter(Boolean).length + "/2";
+    renderThumbs(); pyramidSoon();
+  }
+  function renderThumbs() {
+    $("#thumbs").innerHTML = [0, 1].map(function (i) { return photos[i] ? '<div class="th"><img alt="사진' + (i + 1) + '" src="' + photos[i] + '"><span>사진' + (i + 1) + '</span><button class="btn sm" data-pdel="' + i + '">지우기</button></div>' : ""; }).join("");
+  }
+  /* 어절 단위 줄바꿈, 두 줄이면 둘째 줄이 더 길게 */
+  var pyT = 0;
+  function pyramidSoon() { if (pyT) cancelAnimationFrame(pyT); pyT = requestAnimationFrame(function () { pyT = 0; pyramid(); }); }
+  function pyramid() {
+    document.querySelectorAll(".py").forEach(function (el) {
+      var txt = el.dataset.t != null ? el.dataset.t : (el.dataset.t = el.textContent);
+      if (el.textContent !== txt) el.textContent = txt;
+      if (el.offsetParent === null) return;
+      var cs = getComputedStyle(el), lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.5;
+      if (Math.round(el.getBoundingClientRect().height / lh) !== 2) return;
+      var words = txt.split(" "), total = txt.length, best = -1, bestD = 1e9, acc = 0;
+      for (var i = 0; i < words.length - 1; i++) {
+        acc += words[i].length + (i ? 1 : 0);
+        var d = Math.abs(acc - total * 0.42);
+        if (acc < total - acc - 1 && d < bestD) { bestD = d; best = i; }
+      }
+      if (best < 0) return;
+      el.textContent = ""; el.appendChild(document.createTextNode(words.slice(0, best + 1).join(" "))); el.appendChild(document.createElement("br")); el.appendChild(document.createTextNode(words.slice(best + 1).join(" ")));
+      if (Math.round(el.getBoundingClientRect().height / lh) > 2) el.textContent = txt;
+    });
+  }
+
+  /* events */
+  function onField(e) {
+    var t = e.target;
+    if (t.dataset && t.dataset.p) { setp(t.dataset.p, t.type === "checkbox" ? t.checked : t.value); isSample = false; update(); }
+    else if (t.dataset && t.dataset.i != null) { S.items[+t.dataset.i][t.dataset.f] = t.value; isSample = false; update(); }
+  }
+  document.addEventListener("input", onField);
+  document.addEventListener("change", function (e) { if (e.target.type === "checkbox" || e.target.tagName === "SELECT") onField(e); });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.del != null) { S.items.splice(+b.dataset.del, 1); renderItems(); update(); }
+    else if (b.dataset.acc != null) { var i = visible[+b.dataset.acc]; if (i && i.fix) { i.fix(); syncInputs(); renderItems(); update(); toast("수락했습니다"); } }
+    else if (b.dataset.pdel != null) { photos[+b.dataset.pdel] = null; update(); }
+    else if (b.dataset.arcload != null) { var a = ARC[+b.dataset.arcload]; if (a) { S = merge(blank(), a.S); isSample = false; rejected = {}; closePops(); fullRefresh(); } }
+    else if (b.dataset.arcdel != null) { ARC.splice(+b.dataset.arcdel, 1); saveArc(); renderArc(); }
+    else if (b.dataset.rej != null) { var j = visible[+b.dataset.rej]; if (j) { rejected[sig(j)] = 1; update(); } }
+  });
+  $("#addItem").addEventListener("click", function () { S.items.push(newItem()); renderItems(); update(); });
+
+  function readPhoto(file, idx) {
+    if (!file || !/^image\//.test(file.type)) return;
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      var max = 1400, k = Math.min(1, max / Math.max(img.width, img.height));
+      var c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      photos[idx] = c.toDataURL("image/jpeg", 0.85); URL.revokeObjectURL(url); update();
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); toast("이미지를 읽지 못했습니다"); };
+    img.src = url;
+  }
+  function addFiles(files) {
+    var free = [0, 1].filter(function (i) { return !photos[i]; });
+    if (!free.length) { toast("사진 칸이 모두 찼습니다. 지우기 후 다시 넣으세요"); return; }
+    Array.prototype.slice.call(files).filter(function (f) { return /^image\//.test(f.type); }).slice(0, free.length).forEach(function (f, j) { readPhoto(f, free[j]); });
+  }
+  var drop = $("#drop"), pf = $("#photoFile");
+  drop.addEventListener("click", function () { pf.click(); });
+  drop.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pf.click(); } });
+  pf.addEventListener("change", function () { addFiles(pf.files); pf.value = ""; });
+  ["dragenter", "dragover"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("on"); }); });
+  ["dragleave", "drop"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("on"); if (ev === "drop" && e.dataTransfer) addFiles(e.dataTransfer.files); }); });
+  $("#scopeAll").addEventListener("click", function () { Object.keys(S.scope).forEach(function (k) { S.scope[k] = true; }); syncInputs(); update(); });
+  $("#scopeNone").addEventListener("click", function () { Object.keys(S.scope).forEach(function (k) { S.scope[k] = false; }); syncInputs(); update(); });
+  document.addEventListener("keydown", function (e) { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); $("#aiRun").click(); } });
+  document.addEventListener("paste", function (e) {
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    for (var k = 0; k < items.length; k++) {
+      if (items[k].type.indexOf("image") === 0) { readPhoto(items[k].getAsFile(), photos[0] ? 1 : 0); e.preventDefault(); return; }
+    }
+  });
+
+  function summary() {
+    var r = S.recv, s = S.sup, amt = toNum(S.amount), R = S.rule;
+    var L = ["[서식22] 납품 확인 및 검수조서", "",
+      "공급받는자: " + r.name + " / 등록번호 " + r.biz + " / 성명 " + r.rep + " / " + r.addr + " / 일자 " + r.date + " / 전화 " + r.tel + " / " + r.email,
+      "공급자: " + s.name + " / 등록번호 " + s.biz + " / 성명 " + s.rep + " / " + s.addr + " / 업태 " + s.type + " / 종목 " + s.item + " / 전화 " + s.tel,
+      "발주금액(부가세 포함): 일금 " + (amt ? kor(amt) : "") + "원정 (" + fmt(amt) + "원)", "",
+      "No.\t품명\t납품모델명\t사용장소\t수량\t단가\t금액\t사용자 소속\t사용자\t인수자"];
+    S.items.forEach(function (it, i) { L.push([i + 1, it.name, it.model, it.place, it.qty, fmt(toNum(it.price)), fmt(lineAmt(it)), it.dept, it.user, it.recv].join("\t")); });
+    L.push("합계\t\t\t\t\t\t" + fmt(total()), "", "전자세금계산서 발급요청: " + S.taxEmail, "상기 물품(용역)의 이상없음을 확인함.", "담당교수 및 부(센터)장: " + S.head + " (인)", "",
+      "[검수요강 확인]", "검수 주체: " + (R.inspector === "dept" ? "발주부서 검수" : "검수 담당 부서"),
+      "검수 자료: " + (DOCS.filter(function (d) { return R.docs[d[0]]; }).map(function (d) { return d[1]; }).join(", ") || "없음") + (R.tentative ? " (가검수)" : ""),
+      "검수 결과: " + (R.result === "hold" ? "유보 / 거부 사유: " + R.rej.reason : "이상 없음"));
+    return L.join("\n");
+  }
+  var tt;
+  function toast(m) { if (!m) return; var t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 2200); }
+  function copyText(text, okMsg) {
+    function fallback() {
+      var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); toast(ok ? okMsg : "복사하지 못했습니다. 직접 선택해 복사하세요");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback); else fallback();
+  }
+  $("#btnCopy").addEventListener("click", function () { copyText(summary(), "복사했습니다"); });
+  var DL = null;
+  if (window.claude && window.claude.use) window.claude.use("downloads").then(function (d) { DL = d; }, function () {});
+  function docCss() {
+    var out = [];
+    try { Array.prototype.forEach.call(document.styleSheets, function (ss) { var rules; try { rules = ss.cssRules; } catch (e) { return; } Array.prototype.forEach.call(rules || [], function (r) { if (r.selectorText && /\.(doc|paper|pg|pg2|photobox|sign|date|code|ph|red|stamp)\b/.test(r.selectorText) && !/\.over/.test(r.selectorText)) out.push(r.cssText); }); }); } catch (e) {}
+    return out.join("\n");
+  }
+  $("#btnSave").addEventListener("click", function () {
+    if (!DL) { toast("이 보기에서는 파일 저장을 쓸 수 없습니다. 복사 기능을 이용하세요"); return; }
+    var pages = ["#paper1", "#paper2"].concat($("#sheet3").hidden ? [] : ["#paper3"]).map(function (id) {
+      var c = $(id).cloneNode(true); c.removeAttribute("style"); c.classList.remove("over"); c.querySelectorAll(".stamp").forEach(function (x) { x.remove(); }); return c.outerHTML;
+    }).join("\n");
+    var html = '<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>납품 확인 및 검수조서</title><style>:root{--paper:#fff;--ink:#111;--red:#d00000;--sans:"Noto Sans KR","Malgun Gothic",sans-serif;--serif:"Noto Serif KR","Batang",serif}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{margin:0;background:#e9ecea;word-break:keep-all;overflow-wrap:anywhere}@page{size:A4;margin:0}.paper{margin:0 auto 16px;box-shadow:0 2px 10px rgba(0,0,0,.2);page-break-after:always;break-after:page}@media print{body{background:#fff}.paper{margin:0;box-shadow:none}}' + docCss() + "</style></head><body>" + pages + "</body></html>";
+    DL.save({ filename: "납품확인_검수조서.html", data: html }).then(function () { toast("저장했습니다. 파일을 열어 Ctrl + P로 PDF 저장이나 인쇄를 하세요"); }, function (e) { if (e && e.code !== "declined") toast("저장하지 못했습니다"); });
+  });
+
+  /* tabs */
+  var TABS = ["write", "preview", "guide"];
+  function setTab(h) { TABS.forEach(function (t) { var a = document.querySelector('[data-tab="' + t + '"]'); if (a) a.setAttribute("aria-selected", t === h ? "true" : "false"); }); }
+  function showTab() { var h = (location.hash || "").slice(1); setTab(TABS.indexOf(h) < 0 ? "write" : h); }
+  window.addEventListener("hashchange", showTab);
+  window.addEventListener("scroll", function () { var cur = "write"; TABS.forEach(function (t) { var el = document.getElementById(t); if (el && el.getBoundingClientRect().top < 140) cur = t; }); setTab(cur); }, { passive: true });
+  window.addEventListener("resize", function () { fitPapers(); pyramidSoon(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitPapers(); pyramidSoon(); });
+
+  setAi("checking"); syncInputs(); renderItems(); renderArc(); update(); showTab(); updateTeams();
+})();
+</script>
+
+</body></html>
